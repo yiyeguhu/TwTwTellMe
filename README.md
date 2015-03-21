@@ -1,3 +1,7 @@
 # TwTwTellMe
 
-1. Data center: SJC01
+0. Servers
+Data center: SJC01
+
+Mongodb: mongo1.softlayer.com
+
