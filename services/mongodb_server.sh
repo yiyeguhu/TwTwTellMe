@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 # Mongodb server service
 # Usage:
 # mongodb_server.sh start/stop/restart
 
-. ./service.sh
+source ./service.sh
 
 start() {
   mongod --fork --dbpath /data/mongodb/ --logpath /var/log/mongodb.log

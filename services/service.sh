@@ -1,5 +1,4 @@
-#!/bin/sh
-
+#!/bin/bash
 
 service() {
   case "$1" in
