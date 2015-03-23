@@ -34,7 +34,7 @@ def parse_arguments():
     args = parser.parse_args()
     return args
 
-if __name__ == '__main__':
+def main():
     args = parse_arguments()
 
     auth = OAuthHandler(args.consumer_key, args.consumer_secret)
@@ -43,3 +43,14 @@ if __name__ == '__main__':
     l = StdOutListener()
     stream = Stream(auth, l)
     stream.sample()
+
+if __name__ == '__main__':
+    main()
+    # args = parse_arguments()
+    #
+    # auth = OAuthHandler(args.consumer_key, args.consumer_secret)
+    # auth.set_access_token(args.access_token, args.access_token_secret)
+    #
+    # l = StdOutListener()
+    # stream = Stream(auth, l)
+    # stream.sample()
