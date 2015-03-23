@@ -23,7 +23,7 @@ class StdOutListener(StreamListener):
     def on_error(self, status):
         print status
 
-def parse_arguments():
+def _parse_arguments():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--consumer_key', help='Consumer key')
@@ -34,23 +34,14 @@ def parse_arguments():
     args = parser.parse_args()
     return args
 
-def main():
-    args = parse_arguments()
-
-    auth = OAuthHandler(args.consumer_key, args.consumer_secret)
-    auth.set_access_token(args.access_token, args.access_token_secret)
+def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret):
+    auth = OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_token_secret)
 
     l = StdOutListener()
     stream = Stream(auth, l)
     stream.sample()
 
 if __name__ == '__main__':
-    main()
-    # args = parse_arguments()
-    #
-    # auth = OAuthHandler(args.consumer_key, args.consumer_secret)
-    # auth.set_access_token(args.access_token, args.access_token_secret)
-    #
-    # l = StdOutListener()
-    # stream = Stream(auth, l)
-    # stream.sample()
+    args = _parse_arguments()
+    setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret)
