@@ -7,6 +7,7 @@ from daemon import Daemon
 
 from stream.twitter_stream import setup_streaming
 
+
 class TwitterStreamDaemon(Daemon):
     def run(self):
         while True:
