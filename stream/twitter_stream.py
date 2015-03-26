@@ -22,8 +22,8 @@ class StdOutListener(StreamListener):
             tw = Tweet()
             tw.text = ob['text']
             tw.timestamp = int(time())
-            serialized = tw.SerializeToString()
-            print serialized
+            s = tw.__str__()
+            print s
         return True
 
     def on_error(self, error):
