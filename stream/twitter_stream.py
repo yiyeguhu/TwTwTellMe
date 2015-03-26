@@ -11,6 +11,11 @@ from time import time, ctime
 
 import simplejson as json
 
+from pymongo import MongoClient
+
+client = MongoClient()
+collection = client['test']['testData']
+
 class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
     This is a basic listener that just prints received tweets to stdout.
@@ -18,12 +23,13 @@ class StdOutListener(StreamListener):
     def on_data(self, data):
         #print(data)
         ob = json.loads(data)
+
         if "created_at" in ob:
-            tw = Tweet()
-            tw.text = ob['text']
-            tw.timestamp = int(time())
-            s = tw.__str__()
-            print s
+            tw = {}
+            tw['text'] = ob['text']
+            tw['timestamp'] = int(time())
+            print tw
+
         return True
 
     def on_error(self, error):
