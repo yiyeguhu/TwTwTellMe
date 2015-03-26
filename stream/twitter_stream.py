@@ -5,7 +5,9 @@ from tweepy import Stream, OAuthHandler
 
 import argparse
 
-from time import time,ctime
+from schema.python.tweet_pb2 import Tweet
+
+from time import time, ctime
 
 import simplejson as json
 
@@ -14,7 +16,14 @@ class StdOutListener(StreamListener):
     This is a basic listener that just prints received tweets to stdout.
     """
     def on_data(self, data):
-        print(data)
+        #print(data)
+        ob = json.loads(data)
+        if ob.HasField("created_at"):
+            tw = Tweet()
+            tw.text = ob['text']
+            tw.timestamp = int(time())
+            serialized = tw.SerializeToString()
+            print serialized
         return True
 
     def on_error(self, error):

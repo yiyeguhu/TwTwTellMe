@@ -18,7 +18,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='tweet.proto',
   package='',
-  serialized_pb=_b('\n\x0btweet.proto\"(\n\x05Tweet\x12\x0c\n\x04\x62ody\x18\x01 \x02(\t\x12\x11\n\ttimestamp\x18\x02 \x02(\x03')
+  serialized_pb=_b('\n\x0btweet.proto\"(\n\x05Tweet\x12\x0c\n\x04text\x18\x01 \x02(\t\x12\x11\n\ttimestamp\x18\x02 \x02(\x03')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -33,7 +33,7 @@ _TWEET = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='body', full_name='Tweet.body', index=0,
+      name='text', full_name='Tweet.text', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
