@@ -28,6 +28,7 @@ class StdOutListener(StreamListener):
             tw = {}
             tw['text'] = ob['text']
             tw['timestamp'] = int(time())
+            collection.insert(tw)
             print tw
 
         return True
