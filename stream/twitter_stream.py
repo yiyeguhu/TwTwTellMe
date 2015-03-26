@@ -18,7 +18,7 @@ class StdOutListener(StreamListener):
     def on_data(self, data):
         #print(data)
         ob = json.loads(data)
-        if ob.HasField("created_at"):
+        if "created_at" in ob:
             tw = Tweet()
             tw.text = ob['text']
             tw.timestamp = int(time())
