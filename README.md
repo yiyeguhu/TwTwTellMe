@@ -7,7 +7,7 @@
 ## Import our project as packages
 Add path to PYTHONPATH in order to import our project as packages: export PYTHONPATH=/path/to/project:$PYTHONPATH (on your servers)
 
-add __init__.py under the directory which you want to make it a pacakge
+add \_\_init\_\_.py under the directory which you want to make it a pacakge
 
 ##Protobuf
 Download from https://developers.google.com/protocol-buffers/docs/downloads
