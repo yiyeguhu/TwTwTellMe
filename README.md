@@ -6,6 +6,7 @@
 
 ## Add path to PYTHONPATH 
 in order to import our project as packages
+
 export PYTHONPATH=/path/to/project:$PYTHONPATH
 
 ##Protobuf
