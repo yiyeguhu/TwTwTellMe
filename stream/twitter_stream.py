@@ -17,11 +17,8 @@ class StdOutListener(StreamListener):
         print(data)
         return True
 
-    def on_error(self, status):
-        print(status)
-
-    def on_error(self, status):
-        print status
+    def on_error(self, error):
+        print error
 
 def _parse_arguments():
     parser = argparse.ArgumentParser()
