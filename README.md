@@ -24,3 +24,5 @@ sudo make install
 
 protoc --python_out=$DST_DIR $SRC_DIR/tweet.proto
 
+## President candidate list
+http://www.nytimes.com/interactive/2015/us/politics/2016-presidential-candidates.html?_r=0
