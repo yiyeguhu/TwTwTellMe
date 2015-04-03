@@ -5,13 +5,17 @@ from tweepy import Stream, OAuthHandler
 
 import argparse
 
-from schema.python.tweet_pb2 import Tweet
+#from schema.python.tweet_pb2 import Tweet
 
 from time import time, ctime
 
 import simplejson as json
 
 from pymongo import MongoClient
+
+import os
+
+from pprint import pprint
 
 client = MongoClient()
 collection = client['test']['testData']
@@ -21,7 +25,6 @@ class StdOutListener(StreamListener):
     This is a basic listener that just prints received tweets to stdout.
     """
     def on_data(self, data):
-        #print(data)
         ob = json.loads(data)
 
         if "created_at" in ob:
@@ -47,14 +50,32 @@ def _parse_arguments():
     args = parser.parse_args()
     return args
 
-def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret):
+def _get_candidate_names():
+    filename = os.path.dirname(os.path.realpath(__file__)) + "/../resources/candidates.json"
+    with open(filename) as f:
+        candidates = json.load(f)
+
+    pprint(candidates)
+
+    candidate_names = []
+    for candidate in candidates:
+        names = candidates[candidate]
+        for name in names:
+            candidate_names.append(name)
+
+    print candidate_names
+
+    return candidate_names
+
+def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
 
     l = StdOutListener()
     stream = Stream(auth, l)
-    stream.sample()
+    stream.filter(track=tracks, languages=['en'])
 
 if __name__ == '__main__':
     args = _parse_arguments()
-    setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret)
+    candidate_names = _get_candidate_names()
+    setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret, candidate_names)
