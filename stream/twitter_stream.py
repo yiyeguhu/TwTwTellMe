@@ -83,7 +83,7 @@ def _get_candidate_names():
         for name in names:
             candidate_names.append(name)
 
-    print candidate_names
+    print(candidate_names)
 
     return candidate_names
 
