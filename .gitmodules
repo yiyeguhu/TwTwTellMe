@@ -1,3 +1,0 @@
-[submodule "protobuf-json"]
-	path = protobuf-json
-	url = https://github.com/dpp-name/protobuf-json.git
