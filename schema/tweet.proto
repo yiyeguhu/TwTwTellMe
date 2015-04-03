@@ -1,0 +1,8 @@
+// timestamp, text, geo-location (state/county), and ideally mine/calculate candidate_name and theme in realtime and store it.
+
+message Tweet {
+    required string text = 1;
+    required int64 timestamp = 2;
+
+
+}
