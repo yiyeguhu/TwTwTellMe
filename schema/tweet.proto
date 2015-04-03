@@ -3,6 +3,4 @@
 message Tweet {
     required string text = 1;
     required int64 timestamp = 2;
-
-
 }

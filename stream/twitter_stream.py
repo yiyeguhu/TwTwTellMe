@@ -5,7 +5,8 @@ from tweepy import Stream, OAuthHandler
 
 import argparse
 
-#from schema.python.tweet_pb2 import Tweet
+from schema.python.tweet_pb2 import Tweet
+from protobufjson.protobuf_json import pb2json, json2pb
 
 from time import time, ctime
 
@@ -40,11 +41,17 @@ class StdOutListener(StreamListener):
                     hit = True
 
             if hit:
-                tw = {}
-                tw['text'] = text
-                tw['timestamp'] = int(time())
-                collection.insert(tw)
-                print tw
+                tw = Tweet()
+                tw.text = text
+                tw.timestamp = int(time())
+
+                pprint(tw.SerializeToString())
+
+                json_obj = pb2json(tw)
+                pprint(json_obj)
+
+                collection.insert(json_obj)
+                # print tw
 
         return True
 
