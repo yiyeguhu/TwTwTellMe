@@ -1,5 +1,9 @@
 # TwTwTellMe
 
+## Complete Git clone
+
+git clone --recursive https://github.com/yiyeguhu/TwTwTellMe.git
+
 ##Servers (Data center: SJC01)
 
 *Mongodb: mongo1.softlayer.com (198.23.76.25/10.88.6.137)
