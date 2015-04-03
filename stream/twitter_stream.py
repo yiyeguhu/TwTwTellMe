@@ -24,15 +24,27 @@ class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
     This is a basic listener that just prints received tweets to stdout.
     """
+
+    def __init__(self, tracks):
+        self.tracks = tracks
+
     def on_data(self, data):
         ob = json.loads(data)
 
         if "created_at" in ob:
-            tw = {}
-            tw['text'] = ob['text']
-            tw['timestamp'] = int(time())
-            collection.insert(tw)
-            print tw
+            hit = False
+            text = ob['text']
+
+            for track in self.tracks:
+                if track in text:
+                    hit = True
+
+            if hit:
+                tw = {}
+                tw['text'] = text
+                tw['timestamp'] = int(time())
+                collection.insert(tw)
+                print tw
 
         return True
 
@@ -71,7 +83,7 @@ def setup_streaming(consumer_key, consumer_secret, access_token, access_token_se
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
 
-    l = StdOutListener()
+    l = StdOutListener(tracks)
     stream = Stream(auth, l)
     stream.filter(track=tracks, languages=['en'])
 
