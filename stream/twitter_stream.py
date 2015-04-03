@@ -18,8 +18,8 @@ import os
 
 from pprint import pprint
 
-client = MongoClient()
-collection = client['test']['testData']
+# client = MongoClient()
+# collection = client['test']['testData']
 
 class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
@@ -50,13 +50,14 @@ class StdOutListener(StreamListener):
                 json_obj = pb2json(tw)
                 pprint(json_obj)
 
-                collection.insert(json_obj)
+                # collection.insert(json_obj)
                 # print tw
 
         return True
 
     def on_error(self, error):
-        print error
+        pass
+        # print error
 
 def _parse_arguments():
     parser = argparse.ArgumentParser()
