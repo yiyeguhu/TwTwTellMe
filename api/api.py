@@ -17,7 +17,6 @@ def after_request(response):
 
 class Viz(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('theme', type=str, required=True)
     parser.add_argument('index', type=int, required=True)
     parser.add_argument('init', type=bool, required=True)
 
@@ -61,13 +60,28 @@ class Viz(Resource):
         }
 
 
+class Tweets(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('index', type=int, required=True)
+    parser.add_argument('candidate', type=str, required=True)
 
-
-
+    def put(self):
+        args = self.parser.parse_args(strict=True)
+        return [
+            {"user_name": "User Name",
+             "user_state": "State",
+             "tweet_text": "Tweet text here",
+             "sentiment_score": 6},
+            {"user_name": "User Name",
+             "user_state": "State",
+             "tweet_text": "Tweet text here",
+             "sentiment_score": 6}
+        ]
 
 
 # API ROUTING
 api.add_resource(Viz, '/viz')
+api.add_resource(Tweets, '/tweets')
 
 if __name__ == "__main__":
     runner.run()
