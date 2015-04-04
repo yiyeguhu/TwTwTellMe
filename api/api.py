@@ -95,7 +95,7 @@ class Viz(Resource):
                                   }
                               }
                           },
-                          }
+                          },
                 "00002": {"timestamp": "2015-04-03T21:19:11+00:00",
                           "candidate_data": {
                               "Ted Cruz": {
