@@ -18,9 +18,6 @@ import os
 
 from pprint import pprint
 
-import urllib3
-urllib3.disable_warnings()
-
 client = MongoClient()
 collection = client['test']['testData']
 
