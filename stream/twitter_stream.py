@@ -51,13 +51,12 @@ class StdOutListener(StreamListener):
                 pprint(json_obj)
 
                 collection.insert(json_obj)
-                # print tw
+                print(tw)
 
         return True
 
     def on_error(self, error):
-        pass
-        # print error
+        print(error)
 
 def _parse_arguments():
     parser = argparse.ArgumentParser()
