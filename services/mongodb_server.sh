@@ -5,7 +5,7 @@
 # mongodb_server.sh start/stop/restart
 
 start() {
-  mongod --fork --dbpath /data/mongodb/ --logpath /var/log/mongodb.log
+  mongod --fork --dbpath /data/mongodb/ --logpath /data/log/mongodb/mongodb.log
 }
  
 stop() {
