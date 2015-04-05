@@ -28,5 +28,8 @@ sudo make install
 
 protoc --python_out=$DST_DIR $SRC_DIR/tweet.proto
 
+## Updated with requirements.txt
+To install all project requirments, simply create a virtualenv, then run pip install -r requirments.txt. All requirements (including protobuf) will be automatically installed. Please add any additional requriements into requirments.txt as you add them to the proejct
+
 ## President candidate list
 http://www.nytimes.com/interactive/2015/us/politics/2016-presidential-candidates.html?_r=0
