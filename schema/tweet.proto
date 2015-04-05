@@ -2,5 +2,5 @@
 
 message Tweet {
     required string text = 1;
-    required int64 timestamp = 2;
+    required int32 timestamp = 2;
 }
