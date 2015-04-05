@@ -92,8 +92,7 @@ def setup_streaming(consumer_key, consumer_secret, access_token, access_token_se
 
     l = StdOutListener(tracks)
     stream = Stream(auth, l)
-    # stream.filter(track=tracks, languages=['en'])
-    stream.sample()
+    stream.filter(track=tracks, languages=['en'])
 
 if __name__ == '__main__':
     args = _parse_arguments()
