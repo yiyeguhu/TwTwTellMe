@@ -13,7 +13,7 @@ def find_candidate(text):
     res = OtherCandidate
 
     for cand in candidates:
-        for term in cand:
+        for term in candidates[cand]:
             if term in text:
                 res = cand
 
