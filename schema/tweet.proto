@@ -12,4 +12,6 @@ message Tweet {
 
     optional string state = 3;
     optional string country = 4;
+
+    required string candidate = 5;
 }
