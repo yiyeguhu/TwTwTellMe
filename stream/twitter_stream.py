@@ -5,10 +5,6 @@ from tweepy import Stream, OAuthHandler
 
 import argparse
 
-from schema.python.tweet_pb2 import Tweet
-from protobufjson.protobuf_json import pb2json, json2pb
-from algo.geoparser import parse_location, OtherCountry, OtherState
-
 from time import time, ctime
 
 import simplejson as json
@@ -18,6 +14,11 @@ from pymongo import MongoClient
 import os
 
 from pprint import pprint
+
+# from own packages
+from schema.python.tweet_pb2 import Tweet
+from protobufjson.protobuf_json import pb2json, json2pb
+from algo.geoparser import parse_location, OtherCountry, OtherState
 
 client = MongoClient()
 collection = client['test']['testData']
@@ -58,6 +59,7 @@ class StdOutListener(StreamListener):
                             tw.country = country_name
 
                     json_obj = pb2json(tw)
+                    json_obj['timestamp'] = int(json_obj['timestamp']) # fix timestamp to int type
                     collection.insert(json_obj)
 
                     pprint(tw.SerializeToString())
