@@ -3,4 +3,7 @@
 message Tweet {
     required string text = 1;
     required int32 timestamp = 2;
+
+    optional string state = 3;
+    optional string country = 4;
 }
