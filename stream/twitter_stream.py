@@ -7,6 +7,7 @@ import argparse
 
 from schema.python.tweet_pb2 import Tweet
 from protobufjson.protobuf_json import pb2json, json2pb
+from algo.geoparser import parse_location, OtherCountry, OtherState
 
 from time import time, ctime
 
@@ -30,30 +31,40 @@ class StdOutListener(StreamListener):
         self.tracks = tracks
 
     def on_data(self, data):
-        ob = json.loads(data)
+        try:
+            ob = json.loads(data)
 
-        if "created_at" in ob:
-            print ob
+            if "created_at" in ob and 'text' in ob:
+                text = ob['text']
 
-            hit = False
-            text = ob['text']
+                hit = False
+                for track in self.tracks:
+                    if track in text:
+                        hit = True
 
-            for track in self.tracks:
-                if track in text:
-                    hit = True
+                if hit:
+                    tw = Tweet()
 
-            if hit:
-                tw = Tweet()
-                tw.text = text
-                tw.timestamp = int(time())
+                    # required fields
+                    tw.text = text
+                    tw.timestamp = int(time())
 
-                pprint(tw.SerializeToString())
+                    # optional
+                    if 'user' in ob and 'location' in ob['user']:
+                        state_name, country_name = parse_location(ob['user']['location'])
+                        if state_name != OtherState:
+                            tw.state = state_name
+                        if country_name != OtherCountry:
+                            tw.country = country_name
 
-                json_obj = pb2json(tw)
-                pprint(json_obj)
+                    json_obj = pb2json(tw)
+                    collection.insert(json_obj)
 
-                collection.insert(json_obj)
-                print(tw)
+                    pprint(tw.SerializeToString())
+                    pprint(json_obj)
+                    print(tw)
+        except:
+            pass
 
         return True
 
