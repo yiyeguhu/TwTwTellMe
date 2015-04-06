@@ -4,7 +4,7 @@
 // country (optional)
 // candidate_name
 // theme
-// sensitive score
+// sentiment score
 
 message Tweet {
     required string text = 1;

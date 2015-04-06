@@ -1,10 +1,49 @@
 {
-  "hillary_rodham_clinton": [
+  "Hillary Rodham Clinton": [
     "hillary",
     "hillary clinton"
   ],
-  "ted_cruz": [
+  "Martin O'Malley": [
+    "martin o'malley"
+  ],
+  "Jim Webb": [
+    "jim webb"
+  ],
+  "Ted Cruz": [
     "ted cruze",
     "tedcruze"
+  ],
+  "Jeb Bush": [
+    "jeb bush"
+  ],
+  "Scott Walker": [
+    "scott walker"
+  ],
+  "Chris Christie": [
+    "chris christie"
+  ],
+  "Mike Huckabee": [
+    "mike huckabee"
+  ],
+  "Marco Rubio": [
+    "marco rubio"
+  ],
+  "Rand Paul": [
+    "rand paul"
+  ],
+  "Rick Santorum": [
+    "rick santorum"
+  ],
+  "Rick Perry": [
+    "rick perry"
+  ],
+  "Bobby Jindal": [
+    "bobby jindal"
+  ],
+  "Carly Fiorina": [
+    "carly fiorina"
+  ],
+  "Ben Carson": [
+    "ben carson"
   ]
 }
