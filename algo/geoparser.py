@@ -78,9 +78,6 @@ def parse_address(addr):
         state = OtherState
         country = OtherCountry
 
-    if state not in states:
-        state = OtherState
-
     return state, country
 
 def parse_location(loc):

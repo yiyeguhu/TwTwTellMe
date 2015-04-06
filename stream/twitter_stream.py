@@ -44,6 +44,7 @@ class StdOutListener(StreamListener):
                     # required fields
                     tw.text = text
                     tw.timestamp = int(time())
+                    tw.candidate = cand
 
                     # optional
                     if 'user' in ob and 'location' in ob['user']:
