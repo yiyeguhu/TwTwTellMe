@@ -33,6 +33,8 @@ class StdOutListener(StreamListener):
         ob = json.loads(data)
 
         if "created_at" in ob:
+            print ob
+
             hit = False
             text = ob['text']
 
