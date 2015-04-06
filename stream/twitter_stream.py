@@ -19,6 +19,7 @@ from pprint import pprint
 from schema.python.tweet_pb2 import Tweet
 from protobufjson.protobuf_json import pb2json, json2pb
 from algo.geoparser import parse_location, OtherCountry, OtherState
+from algo.dataminer import find_candidate, OtherCandidate
 
 client = MongoClient()
 collection = client['test']['testData']
@@ -28,9 +29,6 @@ class StdOutListener(StreamListener):
     This is a basic listener that just prints received tweets to stdout.
     """
 
-    def __init__(self, tracks):
-        self.tracks = tracks
-
     def on_data(self, data):
         try:
             ob = json.loads(data)
@@ -38,12 +36,9 @@ class StdOutListener(StreamListener):
             if "created_at" in ob and 'text' in ob:
                 text = ob['text']
 
-                hit = False
-                for track in self.tracks:
-                    if track in text:
-                        hit = True
+                cand = find_candidate(text)
 
-                if hit:
+                if cand != OtherCandidate:
                     tw = Tweet()
 
                     # required fields
@@ -59,7 +54,6 @@ class StdOutListener(StreamListener):
                             tw.country = country_name
 
                     json_obj = pb2json(tw)
-                    json_obj['timestamp'] = int(json_obj['timestamp']) # fix timestamp to int type
                     collection.insert(json_obj)
 
                     pprint(tw.SerializeToString())
@@ -105,7 +99,7 @@ def setup_streaming(consumer_key, consumer_secret, access_token, access_token_se
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
 
-    l = StdOutListener(tracks)
+    l = StdOutListener()
     stream = Stream(auth, l)
     stream.filter(track=tracks, languages=['en'])
 
