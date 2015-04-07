@@ -1,42 +1,97 @@
 {
-  "ted_cruz": [
-    "Ted Cruz",
-    "@tedcruz"
+  "Ted Cruz": [
+    "ted cruz",
+    "@tedcruz",
+    "#TedCruz",
+    "@4principle",
+    "#SenTedCruz",
+    "#SenCruz",
+    "#TedCruz2016"
   ],
-    "jeb_bush": [
-    "Jeb Bush",
-    "@JebBush"
+  "Jeb Bush": [
+    "jeb bush",
+    "@JebBush",
+    "#JebBush",
+    "#RightToRise",
+    "#GovJebBush",
+    "#GovBush",
+    "#JebBush2016"
+
   ],
-    "scott_walker": [
-    "Scott Walker",
-    "@ScottWalker"
+  "Scott Walker": [
+    "scott walker",
+    "@ScottWalker",
+    "#ScottWalker",
+    "#ScottWalker2016",
+    "#GovScottWalker",
+    "#GovWalker",
+    "#OurAmericanRevival"
   ],
-    "chris_christie": [
-    "Chris Christie",
-    "@ChrisChristie"
+  "Chris Christie": [
+    "chris christie",
+    "@ChrisChristie",
+    "#ChrisChristie",
+    "#ChrisChristie2016",
+    "#GovChrisChristie",
+    "#GovChristie",
+    "Leadership Matters for America",
+    "#LeadershipMattersForAmerica"
   ],
-    "mike_huckabee": [
-    "Mike Huckabee",
-    "@GovMikeHuckabee"
+  "Mike Huckabee": [
+    "mike huckabee",
+    "@GovMikeHuckabee",
+    "#MikeHuckabee",
+    "#GovMikeHuckabee",
+    "#GovHuckabee",
+    "#MikeHuckabee2016",
+    "Pursuing America’s Greatness"
   ],
-    "marco_rubio": [
-    "Marco Rubio",
-    "@marcorubio"
+  "Marco Rubio": [
+    "marco rubio",
+    "@marcorubio",
+    "#MarcoRubio",
+    "#MarcoRubio2016",
+    "#ReclaimAmericaPAC",
+    "#SenMarcoRubio",
+    "#SenRubio"
+
   ],
-    "rand_paul": [
-    "Rand Paul",
-    "@RandPaul"
+  "Rand Paul": [
+    "rand paul",
+    "@RandPaul",
+    "#RandPaul",
+    "#StandWithRand",
+    "#RandPaul2016",
+    "#SenRandPaul",
+    "#SenPaul",
+    "RandPAC",
+    "#RandPAC"
   ],
-    "rick_santorum": [
-    "Rick Santorum",
-    "@RickSantorum"
+  "Rick Santorum": [
+    "rick santorum",
+    "@RickSantorum",
+    "#RickSantorum",
+    "#RickSantorum2016",
+    "#SenRickSantorum",
+    "#SenSantorum",
+    "PatriotVoicesPAC",
+    "@PV_PAC"
   ],
-    "rick_perry": [
-    "Rick Perry",
-    "@GovernorPerry"
+  "Rick Perry": [
+    "rick perry",
+    "@GovernorPerry",
+    "#RickPerry",
+    "#RickPerry2016",
+    "#GovRickPerry",
+    "#GovPerry",
+    "#RickPAC"
   ],
-    "bobby_jindal": [
-    "Bobby Jindal",
-    "@BobbyJindal"
+  "Bobby Jindal": [
+    "bobby jindal",
+    "@BobbyJindal",
+    "#BobbyJindal",
+    "#BobbyJindal2016",
+    "GovBobbyJindal",
+    "GovJindal"
   ]
 }
