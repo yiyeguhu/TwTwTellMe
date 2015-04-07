@@ -1,10 +1,42 @@
 {
-  "hillary_rodham_clinton": [
-    "hillary",
-    "hillary clinton"
-  ],
   "ted_cruz": [
-    "ted cruze",
-    "tedcruze"
+    "Ted Cruz",
+    "@tedcruz"
+  ],
+    "jeb_bush": [
+    "Jeb Bush",
+    "@JebBush"
+  ],
+    "scott_walker": [
+    "Scott Walker",
+    "@ScottWalker"
+  ],
+    "chris_christie": [
+    "Chris Christie",
+    "@ChrisChristie"
+  ],
+    "mike_huckabee": [
+    "Mike Huckabee",
+    "@GovMikeHuckabee"
+  ],
+    "marco_rubio": [
+    "Marco Rubio",
+    "@marcorubio"
+  ],
+    "rand_paul": [
+    "Rand Paul",
+    "@RandPaul"
+  ],
+    "rick_santorum": [
+    "Rick Santorum",
+    "@RickSantorum"
+  ],
+    "rick_perry": [
+    "Rick Perry",
+    "@GovernorPerry"
+  ],
+    "bobby_jindal": [
+    "Bobby Jindal",
+    "@BobbyJindal"
   ]
 }
