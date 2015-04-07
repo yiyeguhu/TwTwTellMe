@@ -5,9 +5,6 @@ from tweepy import Stream, OAuthHandler
 
 import argparse
 
-from schema.python.tweet_pb2 import Tweet
-from protobufjson.protobuf_json import pb2json, json2pb
-
 from time import time, ctime
 
 import simplejson as json
@@ -18,6 +15,12 @@ import os
 
 from pprint import pprint
 
+# from own packages
+from schema.python.tweet_pb2 import Tweet
+from protobufjson.protobuf_json import pb2json, json2pb
+from algo.geoparser import parse_location, OtherCountry, OtherState
+from algo.dataminer import find_candidate, OtherCandidate
+
 client = MongoClient()
 collection = client['test']['testData']
 
@@ -26,38 +29,44 @@ class StdOutListener(StreamListener):
     This is a basic listener that just prints received tweets to stdout.
     """
 
-    def __init__(self, tracks):
-        self.tracks = tracks
-
     def on_data(self, data):
-        ob = json.loads(data)
+        try:
+            ob = json.loads(data)
 
-        if "created_at" in ob:
-            hit = False
-            text = ob['text']
+            if "created_at" in ob and 'text' in ob:
+                text = ob['text']
 
-            for track in self.tracks:
-                if track in text:
-                    hit = True
+                cand = find_candidate(text)
 
-            if hit:
-                tw = Tweet()
-                tw.text = text
-                tw.timestamp = int(time())
+                if cand != OtherCandidate:
+                    tw = Tweet()
 
-                pprint(tw.SerializeToString())
+                    # required fields
+                    tw.text = text
+                    tw.timestamp = int(time())
+                    tw.candidate = cand
 
-                json_obj = pb2json(tw)
-                pprint(json_obj)
+                    # optional
+                    if 'user' in ob and 'location' in ob['user']:
+                        state_name, country_name = parse_location(ob['user']['location'])
+                        if state_name != OtherState:
+                            tw.state = state_name
+                        if country_name != OtherCountry:
+                            tw.country = country_name
 
-                collection.insert(json_obj)
-                # print tw
+                    json_obj = pb2json(tw)
+                    collection.insert(json_obj)
+
+                    pprint(tw.SerializeToString())
+                    pprint(json_obj)
+                    print(tw)
+        except:
+            pass
 
         return True
 
     def on_error(self, error):
-        pass
-        # print error
+        print(error)
 
 def _parse_arguments():
     parser = argparse.ArgumentParser()
@@ -91,7 +100,7 @@ def setup_streaming(consumer_key, consumer_secret, access_token, access_token_se
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
 
-    l = StdOutListener(tracks)
+    l = StdOutListener()
     stream = Stream(auth, l)
     stream.filter(track=tracks, languages=['en'])
 

@@ -6,7 +6,7 @@ git clone --recursive https://github.com/yiyeguhu/TwTwTellMe.git
 
 ##Servers (Data center: SJC01)
 
-*Mongodb: mongo1.softlayer.com (198.23.76.25/10.88.6.137)
+*Mongodb: mongo1.softlayer.com (198.23.76.22/10.88.6.134)
 
 ## Import our project as packages
 export PYTHONPATH=/path/to/project:$PYTHONPATH (on your servers)

@@ -1,6 +1,17 @@
-// timestamp, text, geo-location (state/county), and ideally mine/calculate candidate_name and theme in realtime and store it.
+// text
+// timestamp
+// state (optional)
+// country (optional)
+// candidate_name
+// theme
+// sentiment score
 
 message Tweet {
     required string text = 1;
-    required int64 timestamp = 2;
+    required int32 timestamp = 2;
+
+    optional string state = 3;
+    optional string country = 4;
+
+    required string candidate = 5;
 }
