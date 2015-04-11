@@ -64,7 +64,7 @@ def form_cand(cand, subwords, addsubwords, wholewords, addwholewords):
 # output: true if at least one list has a match, false if no lists have matches
 
 def check_candidates(text, chk):
-	if chk[0] is not in text:
+	if chk[0] not in text:
 		return False
 	curFlag = False
 	for i in chk[1]:
@@ -87,101 +87,123 @@ def return_candidates(tweetText):
     
     text = clean_text(tweetText)
     
-    keywords = ["candidate", "republican", "gop", "president", "campaign", "primary", "elect", "politic", "vote", "democrat", "caucus"]
+    keywords = ["candidate", "republican", "gop", "president", "campaign", "primary", "elect", "politic", "vote", "democrat", "caucus", "2016"]
     
-    candidates = [[]]
-    comm_cand = ["bolton", "bush", "carson", "christie", "cruz", "gilmore", "graham", "palin", "paul", "pence", "perry", "rubio", "trump", "walker"]
+    candidates = []
+    comm_cand = ["bush", "christie", "cruz", "jindal", "huckabee", "paul", "perry", "rubio", "santorum", "walker"]
+    cand_type = [0, 0, 0, 1, 1, 0, 0, 0, 1, 0]
     comm_cand_sub = []
     comm_cand_whole = []
-
-    # John Bolton
-
-    comm_cand_sub.append(["johnbolton"])
-    comm_cand_whole.append(["john"])
+    cand_themes = []
 
     # Jeb Bush
 
-    comm_cand_sub.append(["jebbush"])
-    comm_cand_whole.append(["jeb"])
-
-    # Ben Carson
-
-    comm_cand_sub.append(["bencarson"])
-    comm_cand_whole.append(["ben"])
+    comm_cand_sub.append(["jebbush", "righttorise", "govbush", "goveror"])
+    comm_cand_whole.append(["jeb", "gov", "florida", "fl"])
+    themes = []
+    themes.append([1, ["righttorise"]])
+    themes.append([3, ["right", "to", "rise"]])
+    cand_themes.append(themes)
 
     # Chris Christie
 
-    comm_cand_sub.append(["chrischristie"])
-    comm_cand_whole.append(["christie"])
+    comm_cand_sub.append(["chrischristie", "leadership", "govchristie", "governor"])
+    comm_cand_whole.append(["chris", "gov", "governor", "jersey", "nj"])
+    themes = []
+    themes.append([1, ["leadershipmattersforamerica"]])
+    themes.append([3, ["leadership", "matters", "america"]])
+    cand_themes.append(themes)
 
     # Ted Cruz
 
-    comm_cand_sub.append(["tedcruz"])
-    comm_cand_whole.append(["ted"])
+    comm_cand_sub.append(["tedcruz", "4principle", "senator"])
+    comm_cand_whole.append(["ted", "sen"])
+    themes = []
+    themes.append([1, ["4principle"]])
+    cand_themes.append(themes)
 
-    # Jim Gilmore
+    # Bobby Jindal
 
-    comm_cand_sub.append(["jimgilmore"])
-    comm_cand_whole.append(["jim"])
+    # rare candidate - one instance of last name should be enough
+    comm_cand_sub.append(["jindal"])
+    comm_cand_whole.append([])
+    themes = []
+    cand_themes.append(themes)
 
-    # Lindsey Graham
+    # Mike Huckabee
 
-    comm_cand_sub.append(["lindseygraham"])
-    comm_cand_whole.append(["lindsey"])
-
-    # Sarah Palin
-
-    comm_cand_sub.append(["sarahpalin"])
-    comm_cand_whole.append(["sarah"])
+    # rare candidate - one instance of last name should be enough
+    comm_cand_sub.append(["huckabee"])
+    comm_cand_whole.append([])
+    themes = []
+    themes.append([1, ["pursuingamericasgreatness"]])
+    themes.append([3, ["pursuing", "americas", "greatness"]])
+    cand_themes.append(themes)
 
     # Rand Paul
 
-    comm_cand_sub.append(["randpaul"])
-    comm_cand_whole.append(["rand"])
-
-    # Mike Pence
-
-    comm_cand_sub.append(["mikepence"])
-    comm_cand_whole.append(["mike"])
+    comm_cand_sub.append(["randpaul", "senator", "standwithrand", "randpac"])
+    comm_cand_whole.append(["rand", "sen"])
+    themes.append([1, ["standwithrand", "randpac"]])
+    themes.append([3, ["stand", "with", "rand"]])
+    cand_themes.append(themes)
 
     # Rick Perry
 
-    comm_cand_sub.append(["rickperry"])
-    comm_cand_whole.append(["rick"])
+    comm_cand_sub.append(["rickperry", "goveror", "rickpac"])
+    comm_cand_whole.append(["rick", "gov"])
+    themes = []
+    themes.append([1, ["rickpac"]])
+    cand_themes.append(themes)
 
     # Marco Rubio
 
-    comm_cand_sub.append(["marcorubio"])
-    comm_cand_whole.append(["marco"])
+    comm_cand_sub.append(["marcorubio", "senator", "reclaim", "reclaimamerica"])
+    comm_cand_whole.append(["marco", "sen"])
+    themes = []
+    themes.append([1, ["reclaimamerica", "reclaimamericapac"]])
+    themes.append([2, ["reclaim", "america"]])
+    cand_themes.append(themes)
 
-    # Donald Trump
+    # Rick Santorum
 
-    comm_cand_sub.append(["donaldtrump"])
-    comm_cand_whole.append(["donald"])
+    # rare candidate - one instance of last name should be enough
+    comm_cand_sub.append(["santorum"])
+    comm_cand_whole.append([])
+    themes = []
+    themes.append([1, ["patriotvoices", "patriotvoicespac", "pvpac"]])
+    themes.append([2, ["patriot", "voices"]])
+    themes.append([2, ["pv", "pac"]])
+    cand_themes.append(themes)
 
     # Scott Walker
 
-    comm_cand_sub.append(["scottwalker"])
-    comm_cand_whole.append(["walker"])
-
-    rare_cand = ["bachmann", "ehrlich", "fiorina", "huckabee", "jindal", "kasich", "pataki", "romney", "santorum"]
+    comm_cand_sub.append(["scottwalker", "governor", "ouramericanrevival"])
+    comm_cand_whole.append(["walker", "gov"])
+    themes = []
+    themes.append([1, ["ouramericanrevival"]])
+    themes.append([3, ["our", "american", "revival"]])
+    cand_themes.append(themes)
     
     i = 0
 
     for cand in comm_cand:
         if check_candidates(text, form_cand(comm_cand[i], keywords, comm_cand_sub[i], [], comm_cand_whole[i])) is True:
-            candidates[0].append(cand)
+            candidates.append(cand)
+        elif check_theme(text, cand_themes[i]) is True:
+            candidates.append(cand)
         i += 1
-    for cand in rare_cand:
-        if check_text(text, [[cand]]) is True:
-            candidates[0].append(cand)
-    
-    candidates.append(TextBlob(tweetText).sentiment.polarity)
-    candidates.append(TextBlob(tweetText).sentiment.subjectivity)
     
     return candidates
 
-# tweet_theme
+# return_sentiment
+# input: string containing the text of an English-language tweet (tweetText)
+# output: sentiment score of tweet, per TextBlob (float of 1 to -1, with 1 being positive, 0 being neutral, and -1 being negative)
+
+def return_sentiment(tweetText):
+    return TextBlob(tweetText).sentiment.polarity
+
+# return_themes
 # input: string containing the text of an English-language tweet (tweetText)
 # output: returns a list of pre-defined themes associated with that tweet (empty list if none)
 
@@ -250,12 +272,18 @@ def return_themes(tweetText):
     theme.append([2, ["middle", "east"]])
     if check_theme(text, theme) is True:
         themes.append("international policy")
+
+    if len(themes) == 0:
+        themes.append("None")
     
     return themes
 
 def main():
     print return_candidates("Rubio's fish tacos")
     print return_candidates("Marco Rubio's fish tacos")
+    print return_candidates("our american revival lol")
+    print return_candidates("patriot values")
+    print return_candidates("jindal huckabee santorum")
     print return_themes("homosexual netanyahu gun")
     
 if __name__ == '__main__':
