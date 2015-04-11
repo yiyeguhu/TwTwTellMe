@@ -1,6 +1,9 @@
 from flask import Flask
 from flask.ext.restful import Api, Resource, reqparse
 from flask.ext.runner import Runner
+import fake_generator
+import datetime
+import time
 
 app = Flask(__name__)
 runner = Runner(app)
@@ -17,147 +20,30 @@ def after_request(response):
 
 class Viz(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('index', type=int, required=True)
-    parser.add_argument('init', type=bool, required=True)
-
+    parser.add_argument('timestamp', type=str, required=True)
+    parser.add_argument('timestamp_end', type=str, required=False)
 
     def put(self):
         args = self.parser.parse_args(strict=True)
+        timeseries = fake_generator.fake_generator(args['timestamp'], args['timestamp_end'], 60)["timeseries"]
+        candidate_list = ["Ted Cruz", "Jeb Bush", "Scott Walker", "Chris Christie", "Mike Huckabee", "Marco Rubio",
+                          "Rand Paul", "Rick Santorum", "Rick Perry", "Bobby Jindal"]
 
-        return {
-            "candidate_list": ["Ted Cruz", "Jeb Bush", "Scott Walker", "Chris Christie", "Mike Huckabee", "Marco Rubio",
-                              "Rand Paul", "Rick Santorum", "Rick Perry", "Bobby Jindal"],
-            "average": {
-                "Ted Cruz": {"NY": {"1": [5, 3], "2": [5, 3], "3": [5, 3], "4": [5, 3], "5": [5, 3], "6": [5, 3]},
-                             "CA": {"1": [5, 3], "2": [5, 3], "3": [5, 3], "4": [5, 3], "5": [5, 3], "6": [5, 3]}
-                             },
-                "Jeb Bush": {"NY": {"1": [5, 3], "2": [5, 3], "3": [5, 3], "4": [5, 3], "5": [5, 3], "6": [5, 3]},
-                             "CA": {"1": [5, 3], "2": [5, 3], "3": [5, 3], "4": [5, 3], "5": [5, 3], "6": [5, 3]}
-                             }
-            },
-            "timeseries": {
-                "00001": {"timestamp": "2015-04-03T21:19:11+00:00",
-                          "candidate_data": {
-                              "Ted Cruz": {
-                                  "All States": {
-                                      "1": 5,
-                                      "2": 4,
-                                      "3": 4,
-                                      "4": 2,
-                                      "5": 3,
-                                      "6": 3
-                                  },
-                                  "States": {
-                                      "NY": {
-                                          "1": 5,
-                                          "2": 4,
-                                          "3": 4,
-                                          "4": 2,
-                                          "5": 3,
-                                          "6": 3
-                                      },
-                                      "CA": {
-                                          "1": 5,
-                                          "2": 4,
-                                          "3": 4,
-                                          "4": 2,
-                                          "5": 3,
-                                          "6": 3
-                                      }
-                                  }
-                              },
-                              "Jeb Bush": {
-                                  "All States": {
-                                      "1": 5,
-                                      "2": 4,
-                                      "3": 4,
-                                      "4": 2,
-                                      "5": 3,
-                                      "6": 3
-                                  },
-                                  "States": {
-                                      "NY": {
-                                          "1": 5,
-                                          "2": 4,
-                                          "3": 4,
-                                          "4": 2,
-                                          "5": 3,
-                                          "6": 3
-                                      },
-                                      "CA": {
-                                          "1": 5,
-                                          "2": 4,
-                                          "3": 4,
-                                          "4": 2,
-                                          "5": 3,
-                                          "6": 3
-                                      }
-                                  }
-                              }
-                          },
-                          },
-                "00002": {"timestamp": "2015-04-03T21:19:11+00:00",
-                          "candidate_data": {
-                              "Ted Cruz": {
-                                  "All States": {
-                                      "1": 5,
-                                      "2": 4,
-                                      "3": 4,
-                                      "4": 2,
-                                      "5": 3,
-                                      "6": 3
-                                  },
-                                  "States": {
-                                      "NY": {
-                                          "1": 5,
-                                          "2": 4,
-                                          "3": 4,
-                                          "4": 2,
-                                          "5": 3,
-                                          "6": 3
-                                      },
-                                      "CA": {
-                                          "1": 5,
-                                          "2": 4,
-                                          "3": 4,
-                                          "4": 2,
-                                          "5": 3,
-                                          "6": 3
-                                      }
-                                  }
-                              },
-                              "Jeb Bush": {
-                                  "All States": {
-                                      "1": 5,
-                                      "2": 4,
-                                      "3": 4,
-                                      "4": 2,
-                                      "5": 3,
-                                      "6": 3
-                                  },
-                                  "States": {
-                                      "NY": {
-                                          "1": 5,
-                                          "2": 4,
-                                          "3": 4,
-                                          "4": 2,
-                                          "5": 3,
-                                          "6": 3
-                                      },
-                                      "CA": {
-                                          "1": 5,
-                                          "2": 4,
-                                          "3": 4,
-                                          "4": 2,
-                                          "5": 3,
-                                          "6": 3
-                                      }
-                                  }
-                              }
-                          },
-                          }
-            }
-        }
+        response = [
+            {"key": "Strong Positive", "values": []},
+            {"key": "Weak Positive", "values": []},
+            {"key": "Neutral", "values": []},
+            {"key": "Weak Negative", "values": []},
+            {"key": "Strong Negative", "values": []}
+        ]
+
+        for k, v in sorted(timeseries.iteritems()):
+            candidate = candidate_list[0]
+            for sent_dict in response:
+                dt = datetime.datetime.strptime(k, '%Y-%m-%d %H:%M:%S')
+                dt = time.mktime(dt.timetuple())
+                sent_dict['values'].append([dt, v['candidate_data'][candidate]['All States'][sent_dict['key']]])
+        return response
 
 
 class Tweets(Resource):
