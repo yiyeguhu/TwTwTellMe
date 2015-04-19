@@ -135,7 +135,6 @@ def return_candidates(tweetText):
     comm_cand_whole.append([])
     themes = []
     themes.append([1, ["pursuingamericasgreatness"]])
-    themes.append([3, ["pursuing", "americas", "greatness"]])
     cand_themes.append(themes)
 
     # Rand Paul
@@ -143,7 +142,6 @@ def return_candidates(tweetText):
     comm_cand_sub.append(["randpaul", "senator", "standwithrand", "randpac", "stand with rand"])
     comm_cand_whole.append(["rand", "sen"])
     themes.append([1, ["standwithrand", "randpac"]])
-    themes.append([3, ["stand", "with", "rand"]])
     cand_themes.append(themes)
 
     # Rick Perry
