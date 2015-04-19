@@ -1,87 +1,84 @@
 {
-  "1429478937.0": {
-    "timestamp": "2015-04-19 17:28:57",
-    "candidate_data": {
-      "Ted Cruz": {
-        "tweets": [
-          {
-            "user_name": "User Name",
-            "user_state": "State",
-            "tweet_text": "Tweet text here",
-            "sentiment_score": 6
-          },
-          {
-            "user_name": "User Name",
-            "user_state": "State",
-            "tweet_text": "Tweet text here",
-            "sentiment_score": 6
-          }
-        ],
-        "sentiment_scores": {
-          "All States": {
+  "candidate_data": {
+    "Ted Cruz": {
+      "tweets": [
+        {
+          "user_name": "User Name",
+          "user_state": "State",
+          "tweet_text": "Tweet text here",
+          "sentiment_score": 6
+        },
+        {
+          "user_name": "User Name",
+          "user_state": "State",
+          "tweet_text": "Tweet text here",
+          "sentiment_score": 6
+        }
+      ],
+      "sentiment_scores": {
+        "All States": {
+          "1": 5,
+          "2": 4,
+          "3": 4,
+          "4": 2,Up
+          "5": 3
+        },
+        "States": {
+          "NY": {
             "1": 5,
             "2": 4,
             "3": 4,
             "4": 2,
             "5": 3
           },
-          "States": {
-            "NY": {
-              "1": 5,
-              "2": 4,
-              "3": 4,
-              "4": 2,
-              "5": 3
-            },
-            "CA": {
-              "1": 5,
-              "2": 4,
-              "3": 4,
-              "4": 2,
-              "5": 3
-            }
+          "CA": {
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 2,
+            "5": 3
           }
         }
-      },
-      "Jeb Bush": {
-        "tweets": [
-          {
-            "user_name": "User Name",
-            "user_state": "State",
-            "tweet_text": "Tweet text here",
-            "sentiment_score": 6
+      }
+    },
+    "Jeb Bush": {
+      "tweets": [
+        {
+          "user_name": "User Name",
+          "user_state": "State",
+          "tweet_text": "Tweet text here",
+          "sentiment_score": 6
+        },
+        {
+          "user_name": "User Name",
+          "user_state": "State",
+          "tweet_text": "Tweet text here",
+          "sentiment_score": 6
+        }
+      ],
+      "sentiment_scores": {
+        "All States": {
+          "1": 5,
+          "2": 4,
+          "3": 4,
+          "4": 2,
+          "5": 3
+        },
+        "States": {
+          "NY": {
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 2,
+            "5": 3,
+            "6": 3
           },
-          {
-            "user_name": "User Name",
-            "user_state": "State",
-            "tweet_text": "Tweet text here",
-            "sentiment_score": 6
-          }
-        ],
-        "sentiment_scores": {
-          "All States": {
+          "CA": {
             "1": 5,
             "2": 4,
             "3": 4,
             "4": 2,
             "5": 3
-          },
-          "States": {
-            "NY": {
-              "1": 5,
-              "2": 4,
-              "3": 4,
-              "4": 2,
-              "5": 3,
-              "6": 3
-            },
-            "CA": {
-              "1": 5,
-              "2": 4,
-              "3": 4,
-              "4": 2,
-              "5": 3
-            }
           }
         }
       }

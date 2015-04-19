@@ -69,8 +69,6 @@ class RedisTest(Resource):
     r_server = redis.Redis(host='198.23.67.172', password='dupont')
     def put(self, posixtime):
         my_blob = {
-              str(posixtime): {
-                "timestamp": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(posixtime)),
                 "candidate_data": {
                   "Ted Cruz": {
                     "tweets": [
@@ -157,7 +155,6 @@ class RedisTest(Resource):
                   }
                 }
               }
-        }
 
         self.r_server.set(posixtime, my_blob)
         return {'success': 'success'}
