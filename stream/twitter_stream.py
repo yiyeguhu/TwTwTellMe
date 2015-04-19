@@ -40,7 +40,7 @@ class StdOutListener(StreamListener):
 
                 candidates = return_candidates(text)
 
-                pprint(text)
+                # pprint(text)
 
                 if candidates:
                     tw = Tweet()
@@ -65,7 +65,7 @@ class StdOutListener(StreamListener):
                         json_obj = pb2json(tw)
                         collection.insert(json_obj)
                         # pprint(tw.SerializeToString())
-                        pprint(json_obj)
+                        # pprint(json_obj)
         except:
             pass
 
