@@ -20,6 +20,7 @@ from schema.python.tweet_pb2 import Tweet
 from protobufjson.protobuf_json import pb2json, json2pb
 from algo.geoparser import parse_location, OtherCountry, OtherState
 from algo.dataminer import find_candidate, OtherCandidate
+from algo.tweet_check import return_candidates, return_sentiment
 
 client = MongoClient()
 collection = client['test']['testData']
@@ -36,15 +37,16 @@ class StdOutListener(StreamListener):
             if "created_at" in ob and 'text' in ob:
                 text = ob['text']
 
-                cand = find_candidate(text)
+                candidates = return_candidates(text)
 
-                if cand != OtherCandidate:
+                if candidates:
                     tw = Tweet()
 
                     # required fields
                     tw.text = text
                     tw.timestamp = int(time())
-                    tw.candidate = cand
+
+                    tw.sentiment = return_sentiment(text)
 
                     # optional
                     if 'user' in ob and 'location' in ob['user']:
@@ -54,12 +56,13 @@ class StdOutListener(StreamListener):
                         if country_name != OtherCountry:
                             tw.country = country_name
 
-                    json_obj = pb2json(tw)
-                    collection.insert(json_obj)
+                    for cand in candidates:
+                        tw.candidate = cand
 
-                    pprint(tw.SerializeToString())
-                    pprint(json_obj)
-                    print(tw)
+                        json_obj = pb2json(tw)
+                        collection.insert(json_obj)
+                        # pprint(tw.SerializeToString())
+                        # pprint(json_obj)
         except:
             pass
 
