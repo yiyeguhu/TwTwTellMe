@@ -15,6 +15,8 @@ import os
 
 from pprint import pprint
 
+from langdetect import detect
+
 # from own packages
 from schema.python.tweet_pb2 import Tweet
 from protobufjson.protobuf_json import pb2json, json2pb
@@ -38,34 +40,36 @@ class StdOutListener(StreamListener):
             if "created_at" in ob and 'text' in ob:
                 text = ob['text']
 
-                candidates = return_candidates(text)
+                if detect(text) == 'en':
 
-                # pprint(text)
+                    candidates = return_candidates(text)
 
-                if candidates:
-                    tw = Tweet()
+                    # pprint(text)
 
-                    # required fields
-                    tw.text = text
-                    tw.timestamp = int(time())
+                    if candidates:
+                        tw = Tweet()
 
-                    tw.sentiment = return_sentiment(text)
+                        # required fields
+                        tw.text = text
+                        tw.timestamp = int(time())
 
-                    # optional
-                    if 'user' in ob and 'location' in ob['user']:
-                        state_name, country_name = parse_location(ob['user']['location'])
-                        if state_name != OtherState:
-                            tw.state = state_name
-                        if country_name != OtherCountry:
-                            tw.country = country_name
+                        tw.sentiment = return_sentiment(text)
 
-                    for cand in candidates:
-                        tw.candidate = cand
+                        # optional
+                        if 'user' in ob and 'location' in ob['user']:
+                            state_name, country_name = parse_location(ob['user']['location'])
+                            if state_name != OtherState:
+                                tw.state = state_name
+                            if country_name != OtherCountry:
+                                tw.country = country_name
 
-                        json_obj = pb2json(tw)
-                        collection.insert(json_obj)
-                        # pprint(tw.SerializeToString())
-                        # pprint(json_obj)
+                        for cand in candidates:
+                            tw.candidate = cand
+
+                            json_obj = pb2json(tw)
+                            collection.insert(json_obj)
+                            # pprint(tw.SerializeToString())
+                            pprint(json_obj)
         except:
             pass
 
