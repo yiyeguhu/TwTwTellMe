@@ -15,14 +15,18 @@ import os
 
 from pprint import pprint
 
+from langdetect import detect
+
 # from own packages
 from schema.python.tweet_pb2 import Tweet
 from protobufjson.protobuf_json import pb2json, json2pb
 from algo.geoparser import parse_location, OtherCountry, OtherState
 from algo.dataminer import find_candidate, OtherCandidate
+from algo.tweet_check import return_candidates, return_sentiment
 
 client = MongoClient()
-collection = client['test']['testData']
+# collection = client['test']['testData']
+collection = client['prod']['tweet']
 
 class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
@@ -36,30 +40,36 @@ class StdOutListener(StreamListener):
             if "created_at" in ob and 'text' in ob:
                 text = ob['text']
 
-                cand = find_candidate(text)
+                if detect(text) == 'en':
 
-                if cand != OtherCandidate:
-                    tw = Tweet()
+                    candidates = return_candidates(text)
 
-                    # required fields
-                    tw.text = text
-                    tw.timestamp = int(time())
-                    tw.candidate = cand
+                    # pprint(text)
 
-                    # optional
-                    if 'user' in ob and 'location' in ob['user']:
-                        state_name, country_name = parse_location(ob['user']['location'])
-                        if state_name != OtherState:
-                            tw.state = state_name
-                        if country_name != OtherCountry:
-                            tw.country = country_name
+                    if candidates:
+                        tw = Tweet()
 
-                    json_obj = pb2json(tw)
-                    collection.insert(json_obj)
+                        # required fields
+                        tw.text = text
+                        tw.timestamp = int(time())
 
-                    pprint(tw.SerializeToString())
-                    pprint(json_obj)
-                    print(tw)
+                        tw.sentiment = return_sentiment(text)
+
+                        # optional
+                        if 'user' in ob and 'location' in ob['user']:
+                            state_name, country_name = parse_location(ob['user']['location'])
+                            if state_name != OtherState:
+                                tw.state = state_name
+                            if country_name != OtherCountry:
+                                tw.country = country_name
+
+                        for cand in candidates:
+                            tw.candidate = cand
+
+                            json_obj = pb2json(tw)
+                            collection.insert(json_obj)
+                            # pprint(tw.SerializeToString())
+                            pprint(json_obj)
         except:
             pass
 
@@ -96,15 +106,19 @@ def _get_candidate_names():
 
     return candidate_names
 
-def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
+def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret):
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
 
     l = StdOutListener()
     stream = Stream(auth, l)
-    stream.filter(track=tracks, languages=['en'])
+    # stream.filter(track=tracks, languages=['en'])
+    # stream.filter(languages=['en'])
+    stream.sample()
 
 if __name__ == '__main__':
     args = _parse_arguments()
-    candidate_names = _get_candidate_names()
-    setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret, candidate_names)
+
+    # candidate_names = _get_candidate_names()
+    # setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret, candidate_names)
+    setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret)
