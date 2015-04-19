@@ -102,7 +102,6 @@ def return_candidates(tweetText):
     comm_cand_whole.append(["jeb", "gov", "florida", "fl"])
     themes = []
     themes.append([1, ["righttorise"]])
-    themes.append([3, ["right", "to", "rise"]])
     cand_themes.append(themes)
 
     # Chris Christie
@@ -182,7 +181,6 @@ def return_candidates(tweetText):
     comm_cand_whole.append(["walker", "gov"])
     themes = []
     themes.append([1, ["ouramericanrevival"]])
-    themes.append([3, ["our", "american", "revival"]])
     cand_themes.append(themes)
     
     i = 0
