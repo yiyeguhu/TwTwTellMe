@@ -40,6 +40,8 @@ class StdOutListener(StreamListener):
 
                 candidates = return_candidates(text)
 
+                pprint(text)
+
                 if candidates:
                     tw = Tweet()
 
@@ -63,7 +65,7 @@ class StdOutListener(StreamListener):
                         json_obj = pb2json(tw)
                         collection.insert(json_obj)
                         # pprint(tw.SerializeToString())
-                        # pprint(json_obj)
+                        pprint(json_obj)
         except:
             pass
 
@@ -111,7 +113,7 @@ def setup_streaming(consumer_key, consumer_secret, access_token, access_token_se
 
 if __name__ == '__main__':
     args = _parse_arguments()
-    
+
     # candidate_names = _get_candidate_names()
     # setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret, candidate_names)
     setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret)
