@@ -43,13 +43,13 @@ def check_theme(text, chk):
 # internal function to form a candidate listing to pass to check_candidates
 
 def form_cand(cand, subwords, addsubwords, wholewords, addwholewords):
-	chk = []
-	cand_sub = []
-	cand_whole = []
-	for word in subwords:
-		cand_sub.append(word)
-	for word in addsubwords:
-		cand_sub.append(word)
+    chk = []
+    cand_sub = []
+    cand_whole = []
+    for word in subwords:
+        cand_sub.append(word)
+    for word in addsubwords:
+        cand_sub.append(word)
 	for word in wholewords:
 		cand_whole.append(word)
 	for word in addwholewords:

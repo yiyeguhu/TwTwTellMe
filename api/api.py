@@ -4,6 +4,7 @@ from flask.ext.runner import Runner
 import fake_generator
 import datetime
 import time
+import redis
 
 app = Flask(__name__)
 runner = Runner(app)
@@ -64,10 +65,111 @@ class Tweets(Resource):
              "sentiment_score": 6}
         ]
 
+class RedisTest(Resource):
+    r_server = redis.Redis(host='198.23.67.172', password='dupont')
+    def put(self, posixtime):
+        my_blob = {
+              str(posixtime): {
+                "timestamp": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(posixtime)),
+                "candidate_data": {
+                  "Ted Cruz": {
+                    "tweets": [
+                      {
+                        "user_name": "User Name",
+                        "user_state": "State",
+                        "tweet_text": "Tweet text here",
+                        "sentiment_score": 6
+                      },
+                      {
+                        "user_name": "User Name",
+                        "user_state": "State",
+                        "tweet_text": "Tweet text here",
+                        "sentiment_score": 6
+                      }
+                    ],
+                    "sentiment_scores": {
+                      "All States": {
+                        "1": 5,
+                        "2": 4,
+                        "3": 4,
+                        "4": 2,
+                        "5": 3
+                      },
+                      "States": {
+                        "NY": {
+                          "1": 5,
+                          "2": 4,
+                          "3": 4,
+                          "4": 2,
+                          "5": 3
+                        },
+                        "CA": {
+                          "1": 5,
+                          "2": 4,
+                          "3": 4,
+                          "4": 2,
+                          "5": 3
+                        }
+                      }
+                    }
+                  },
+                  "Jeb Bush": {
+                    "tweets": [
+                      {
+                        "user_name": "User Name",
+                        "user_state": "State",
+                        "tweet_text": "Tweet text here",
+                        "sentiment_score": 6
+                      },
+                      {
+                        "user_name": "User Name",
+                        "user_state": "State",
+                        "tweet_text": "Tweet text here",
+                        "sentiment_score": 6
+                      }
+                    ],
+                    "sentiment_scores": {
+                      "All States": {
+                        "1": 5,
+                        "2": 4,
+                        "3": 4,
+                        "4": 2,
+                        "5": 3
+                      },
+                      "States": {
+                        "NY": {
+                          "1": 5,
+                          "2": 4,
+                          "3": 4,
+                          "4": 2,
+                          "5": 3,
+                          "6": 3
+                        },
+                        "CA": {
+                          "1": 5,
+                          "2": 4,
+                          "3": 4,
+                          "4": 2,
+                          "5": 3
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+        }
+
+        self.r_server.set(posixtime, my_blob)
+        return {'success': 'success'}
+
+    def get(self, posixtime):
+        data = self.r_server.get(posixtime)
+        return {'success': data}
 
 # API ROUTING
 api.add_resource(Viz, '/viz')
 api.add_resource(Tweets, '/tweets')
+api.add_resource(RedisTest, '/redis-test/<float:posixtime>')
 
 if __name__ == "__main__":
     runner.run()
