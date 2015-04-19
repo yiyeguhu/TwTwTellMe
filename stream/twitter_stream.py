@@ -23,7 +23,8 @@ from algo.dataminer import find_candidate, OtherCandidate
 from algo.tweet_check import return_candidates, return_sentiment
 
 client = MongoClient()
-collection = client['test']['testData']
+# collection = client['test']['testData']
+collection = client['prod']['tweet']
 
 class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
