@@ -91,6 +91,7 @@ def return_candidates(tweetText):
     
     candidates = []
     comm_cand = ["bush", "christie", "cruz", "jindal", "huckabee", "paul", "perry", "rubio", "santorum", "walker"]
+    cand_form = ["Jeb Bush", "Chris Christie", "Ted Cruz", "Bobby Jindal", "Mike Huckabee", "Rand Paul", "Rick Perry", "Marco Rubio", "Rick Santorum", "Scott Walker"]
     cand_type = [0, 0, 0, 1, 1, 0, 0, 0, 1, 0]
     comm_cand_sub = []
     comm_cand_whole = []
@@ -173,7 +174,7 @@ def return_candidates(tweetText):
     # Scott Walker
 
     comm_cand_sub.append(["scottwalker", "governor", "ouramericanrevival", "our american revival"])
-    comm_cand_whole.append(["walker", "gov"])
+    comm_cand_whole.append(["scott", "gov"])
     themes = []
     themes.append([1, ["ouramericanrevival"]])
     cand_themes.append(themes)
@@ -182,9 +183,9 @@ def return_candidates(tweetText):
 
     for cand in comm_cand:
         if check_candidates(text, form_cand(comm_cand[i], keywords, comm_cand_sub[i], [], comm_cand_whole[i])) is True:
-            candidates.append(cand)
+            candidates.append(cand_form[i])
         elif check_theme(text, cand_themes[i]) is True:
-            candidates.append(cand)
+            candidates.append(cand_form[i])
         i += 1
     
     return candidates
