@@ -100,15 +100,18 @@ def _get_candidate_names():
 
     return candidate_names
 
-def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
+def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret):
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
 
     l = StdOutListener()
     stream = Stream(auth, l)
-    stream.filter(track=tracks, languages=['en'])
+    # stream.filter(track=tracks, languages=['en'])
+    stream.filter(languages=['en'])
 
 if __name__ == '__main__':
     args = _parse_arguments()
-    candidate_names = _get_candidate_names()
-    setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret, candidate_names)
+    
+    # candidate_names = _get_candidate_names()
+    # setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret, candidate_names)
+    setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret)
