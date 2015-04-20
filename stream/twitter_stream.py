@@ -69,7 +69,7 @@ class StdOutListener(StreamListener):
                             json_obj = pb2json(tw)
                             collection.insert(json_obj)
                             # pprint(tw.SerializeToString())
-                            pprint(json_obj)
+                            # pprint(json_obj)
         except:
             pass
 
