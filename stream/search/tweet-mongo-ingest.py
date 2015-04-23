@@ -24,16 +24,9 @@ def tweets(tweet_files=list_tweet_files()):
                     yield json.loads(line)
 
 
-def create(client, db="search", collection="tweets"):
-    client[db][collection].create_index(
-        [("id", pymongo.ASCENDING)],
-        unique=True)
-
-
 def ingest(ingest_tweets=tweets(), host="localhost", port=27017, db="search",
            collection="tweets"):
     client = pymongo.MongoClient(host, port)
-    create(client, db, collection)
     try:
         collection = client[db][collection]
         try:

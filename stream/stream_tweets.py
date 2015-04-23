@@ -14,13 +14,25 @@ class CustomStreamListener(StreamListener):
         self.count = 0
         self.verbose = verbose
         super(StreamListener, self).__init__()
-        conn = pymongo.MongoClient()
-        self.db = conn.primarytest
+        self.client = pymongo.MongoClient()
+        self.db = "newdb"
+        self.collection = "tweets"
+        self.create_index()
+
+    def create_index(self):
+        self.client[self.db][self.collection].create_index(
+            [("id", pymongo.ASCENDING)],
+            unique=True)
 
     def on_data(self, tweet):
-        self.db.tweets.insert(json.loads(tweet))
-        self.count += 1
-        print self.count
+        try:
+            collection = self.client[self.db][self.collection]
+            try:
+                collection.insert(json.loads(tweet), continue_on_error=True)
+            except:
+                pass
+        except:
+            pass
 
     def on_error(self, status_code):
         self.log(("error occurred, status code: ", status_code, ", but twitter streaming is continuing"))
