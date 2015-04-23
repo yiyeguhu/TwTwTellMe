@@ -18,7 +18,7 @@ def load_json(path):
         print "Error parsing %s" % path
 
 
-def load_credentials(from_file=False, path='credentials.json'):
+def load_credentials(from_file=True, path='credentials.json'):
     if from_file:
         try:
             with open(path) as f:
