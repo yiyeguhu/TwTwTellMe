@@ -14,25 +14,17 @@ class CustomStreamListener(StreamListener):
         self.count = 0
         self.verbose = verbose
         super(StreamListener, self).__init__()
-        self.client = pymongo.MongoClient()
-        self.db = "newdb"
-        self.collection = "tweets"
+        self.collection = pymongo.MongoClient().newdb.tweets
         self.create_index()
-
-    def create_index(self):
-        self.client[self.db][self.collection].create_index(
-            [("id", pymongo.ASCENDING)],
-            unique=True)
+        self.counter = 0
 
     def on_data(self, tweet):
         try:
-            collection = self.client[self.db][self.collection]
-            try:
-                collection.insert(json.loads(tweet), continue_on_error=True)
-            except:
-                pass
+            self.collection.insert(json.loads(tweet), continue_on_error=True)
+            self.counter +=1
+            self.log(self.counter)
         except:
-            pass
+            self.log("primary key error, but streaming is continuing")
 
     def on_error(self, status_code):
         self.log(("error occurred, status code: ", status_code, ", but twitter streaming is continuing"))
@@ -42,6 +34,12 @@ class CustomStreamListener(StreamListener):
         self.log("timeout occurred, but twitter streaming is continuing")
         return True  # Don't kill the stream
 
+    def create_index(self):
+        self.log("creating primary key")
+        self.collection.create_index(
+            [("id", pymongo.ASCENDING)],
+            unique=True)
+
     def log(self, message):
         if self.verbose:
             print message
@@ -50,7 +48,7 @@ class CustomStreamListener(StreamListener):
 
 if __name__ == '__main__':
     credentials = load_credentials()
-    auth = tweepy_auth(credentials)
+    auth = tweepy_auth(credentials, user=True)
     api = tweepy_api(auth)
 
     with open('search/candidates2.json') as f:
