@@ -109,7 +109,7 @@ def format_json(o):
 
 
 def default_queries():
-    with open('search/candidates2.json') as f:
+    with open('candidates2.json') as f:
         candidate_dict = json.load(f)
 
     track_terms = []
