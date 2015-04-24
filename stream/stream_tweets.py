@@ -6,7 +6,9 @@ from utils import load_credentials, tweepy_auth, tweepy_api
 from tweepy import streaming, StreamListener
 import json
 import argparse
+from os import environ
 
+pwd = environ['MONGOPWD']
 
 class CustomStreamListener(StreamListener):
     def __init__(self, api, verbose=False):
@@ -14,7 +16,9 @@ class CustomStreamListener(StreamListener):
         self.count = 0
         self.verbose = verbose
         super(StreamListener, self).__init__()
-        self.collection = pymongo.MongoClient().newdb.tweets
+        self.client = pymongo.MongoClient(host="198.23.76.22", port=27017)
+        self.client.newdb.authenticate('TwTw', pwd)
+        self.collection = self.client.newdb.tweets
         self.create_index()
         self.counter = 0
 
