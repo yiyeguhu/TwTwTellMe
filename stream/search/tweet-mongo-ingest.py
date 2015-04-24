@@ -24,7 +24,7 @@ def tweets(tweet_files=list_tweet_files()):
                     yield json.loads(line)
 
 
-def ingest(ingest_tweets=tweets(), host="localhost", port=27017, db="search",
+def ingest(ingest_tweets=tweets(), host="localhost", port=27017, db="newdb",
            collection="tweets"):
     client = pymongo.MongoClient(host, port)
     try:
