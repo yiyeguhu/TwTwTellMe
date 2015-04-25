@@ -29,6 +29,10 @@ from algo.dataminer import find_candidates, OtherCandidate
 from algo.tweet_check import return_candidates, return_sentiment
 from stream.utils import load_credentials, tweepy_auth
 
+filename = os.path.dirname(os.path.realpath(__file__)) + "/../resources/candidates.json"
+with open(filename) as f:
+    candidates = json.load(f)
+
 client = MongoClient('127.0.0.1', 27018) # new port 27018
 # collection = client['test']['testData']
 collection = client['prod']['tweet']
@@ -66,6 +70,9 @@ def get_sentiment_stats_for_candidate(cand, starttime, endtime):
     except:
         return _init_sentiment_buckets()
 
+def _init_sentiment_buckets():
+    return {'1':0, '2':0, '3':0, '4':0, '5':0, '6':0}
+
 def get_aggregate_for_candidate(cand, starttime, endtime):
     cand_info = {"tweets":{}, "sentiment_scores": {}}
 
@@ -80,8 +87,16 @@ def get_aggregate_for_candidate(cand, starttime, endtime):
 
     return cand_info
 
-def _init_sentiment_buckets():
-    return {'1':0, '2':0, '3':0, '4':0, '5':0, '6':0}
+def aggregate(starttime, endtime):
+    result = {'candidate_data':{}}
+
+    try:
+        for cand in candidates:
+            result['candidate_data'][cand] = get_aggregate_for_candidate(cand, starttime, endtime)
+
+        return result
+    except:
+        return {'candidate_data':{}}
 
 def get_sentiment_stats_by_state_for_candidate():
     pass
