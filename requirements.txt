@@ -22,3 +22,4 @@ textblob==0.9.0
 tweepy==3.3.0
 wsgiref==0.1.2
 textblob==0.9.0
+beautifulsoup==4.3.2
