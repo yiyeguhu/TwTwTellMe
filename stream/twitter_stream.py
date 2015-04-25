@@ -48,7 +48,8 @@ class StdOutListener(StreamListener):
                 text = ob['text']
 
                 if detect(text) == 'en':
-                    print text
+                    print ''
+                    print ob
 
                     candidates = find_candidates(text)
 
