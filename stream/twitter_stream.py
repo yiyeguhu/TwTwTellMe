@@ -24,7 +24,7 @@ from schema.python.tweet_pb2 import Tweet
 from protobufjson.protobuf_json import pb2json, json2pb
 from algo.geoparser import parse_location, OtherCountry, OtherState
 from algo.dataminer import find_candidates, OtherCandidate
-from algo.tweet_check import return_candidates, return_sentiment
+from algo.tweet_check import return_candidates, return_sentiment, return_themes
 from utils import load_credentials, tweepy_auth
 
 client1 = MongoClient('127.0.0.1', 27018) # new port 27018
@@ -73,6 +73,15 @@ class StdOutListener(StreamListener):
                                     tw.state = state_name
                                 if country_name != OtherCountry:
                                     tw.country = country_name
+
+                        detected_themes = return_themes(text)
+                        for theme in detected_themes:
+                            tw.themes.append(theme)
+
+                        if 'entities' in ob and 'hashtags' in ob['entities']:
+                            tags = ob['entities']['hashtags']
+                            for tag in tags:
+                                tw.hashtags.append(tag)
 
                         for cand in candidates:
                             tw.candidate = cand
