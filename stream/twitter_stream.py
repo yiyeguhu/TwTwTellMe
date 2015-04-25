@@ -24,7 +24,7 @@ from algo.geoparser import parse_location, OtherCountry, OtherState
 from algo.dataminer import find_candidates, OtherCandidate
 from algo.tweet_check import return_candidates, return_sentiment
 
-client = MongoClient('localhost', 27018) # new port 27018
+client = MongoClient('127.0.0.1', 27018) # new port 27018
 # collection = client['test']['testData']
 collection = client['prod']['tweet']
 
