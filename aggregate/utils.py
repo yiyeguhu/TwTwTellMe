@@ -54,6 +54,20 @@ def get_sentiment_stats_for_candidate(cand, starttime, endtime):
     except:
         return _init_sentiment_buckets()
 
+def get_aggregate_for_candidate(cand, starttime, endtime):
+    cand_info = {"tweets":{}, "sentiment_scores": {}}
+
+    # tweets
+
+    # sentiment:
+    # (1)all states
+    all_states = get_sentiment_stats_for_candidate(cand, starttime, endtime)
+    cand_info['sentiment_scores']['All States'] = all_states
+
+    # by state
+
+    return cand_info
+
 def _init_sentiment_buckets():
     return {'1':0, '2':0, '3':0, '4':0, '5':0, '6':0}
 
