@@ -35,6 +35,8 @@ filename = os.path.dirname(os.path.realpath(__file__)) + "/../resources/candidat
 with open(filename) as f:
     candidates = json.load(f)
 
+print candidates
+
 client = MongoClient('127.0.0.1', 27018) # new port 27018
 # collection = client['test']['testData']
 collection = client['prod']['tweet']
