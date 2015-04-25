@@ -5,7 +5,7 @@ from tweepy import Stream, OAuthHandler
 
 import argparse
 
-from time import time, ctime
+from time import time, ctime, mktime
 
 import simplejson as json
 
@@ -18,6 +18,8 @@ from pprint import pprint
 from langdetect import detect
 
 from math import ceil
+
+from datetime import datetime
 
 # from own packages
 from schema.python.tweet_pb2 import Tweet
@@ -32,7 +34,17 @@ client = MongoClient('127.0.0.1', 27018) # new port 27018
 collection = client['prod']['tweet']
 
 def get_start_of_hour(timestamp):
-    return timestamp/3600*3600
+    #return timestamp/3600*3600
+    return datetime_to_unixtime(unixtime_to_datetime(timestamp).replace(minute=0, second=0))
+
+def get_end_of_hour(timestamp):
+    return get_start_of_hour(timestamp) + 3600 - 1
+
+def unixtime_to_datetime(unixtime):
+    return datetime.fromtimestamp(unixtime)
+
+def datetime_to_unixtime(dt):
+    return int(time.mktime(dt.timetuple()))
 
 def get_sentiment_stats_for_candidate(cand, starttime, endtime):
 
