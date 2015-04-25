@@ -67,7 +67,7 @@ class StdOutListener(StreamListener):
                             tw.candidate = cand
 
                             json_obj = pb2json(tw)
-                            collection.insert(json_obj)
+                            collection.insert(json_obj, continue_on_error=True)
                             # pprint(tw.SerializeToString())
                             # pprint(json_obj)
         except:
@@ -77,6 +77,10 @@ class StdOutListener(StreamListener):
 
     def on_error(self, error):
         print(error)
+        return True
+
+    def on_timeout(self):
+        return True
 
 def _parse_arguments():
     parser = argparse.ArgumentParser()
