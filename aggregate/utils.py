@@ -5,6 +5,8 @@ from tweepy import Stream, OAuthHandler
 
 import argparse
 
+import sys
+
 from time import time, ctime, mktime
 
 import simplejson as json
@@ -101,3 +103,11 @@ def aggregate(starttime, endtime):
 def get_sentiment_stats_by_state_for_candidate():
     pass
 
+if __name__ == '__main__':
+    rough_start_time = int(sys.argv[1])
+    print rough_start_time
+
+    start_time = get_start_of_hour(rough_start_time)
+    endtime = get_end_of_hour(start_time)
+
+    aggregate(start_time, endtime)
