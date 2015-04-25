@@ -44,7 +44,7 @@ def unixtime_to_datetime(unixtime):
     return datetime.fromtimestamp(unixtime)
 
 def datetime_to_unixtime(dt):
-    return int(time.mktime(dt.timetuple()))
+    return int(mktime(dt.timetuple()))
 
 def get_sentiment_stats_for_candidate(cand, starttime, endtime):
 
