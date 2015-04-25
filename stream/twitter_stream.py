@@ -31,9 +31,9 @@ client1 = MongoClient('127.0.0.1', 27018) # new port 27018
 # collection = client['test']['testData']
 collection1 = client1['prod']['tweet']
 
-client2 = MongoClient('198.11.194.181', 27017) # new port 27018
-# collection = client['test']['testData']
-collection2 = client2['prod']['tweet']
+# client2 = MongoClient('198.11.194.181', 27017) # new port 27018
+# # collection = client['test']['testData']
+# collection2 = client2['prod']['tweet']
 
 class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
@@ -79,7 +79,7 @@ class StdOutListener(StreamListener):
 
                             json_obj = pb2json(tw)
                             collection1.insert(json_obj, continue_on_error=True)
-                            collection2.insert(json_obj, continue_on_error=True)
+                            # collection2.insert(json_obj, continue_on_error=True)
                             # pprint(tw.SerializeToString())
                             # pprint(json_obj)
         except:
