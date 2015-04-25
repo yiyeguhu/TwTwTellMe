@@ -9,14 +9,14 @@ filename = os.path.dirname(os.path.realpath(__file__)) + "/../resources/candidat
 with open(filename) as f:
     candidates = json.load(f)
 
-def find_candidate(text):
+def find_candidates(text):
     lower_text = text.lower()
-    res = OtherCandidate
+    res = set()
 
     for cand in candidates:
         for term in candidates[cand]:
             t = term.lower()
             if t in lower_text:
-                res = cand
+                res.add(cand)
 
-    return res
+    return list(res)

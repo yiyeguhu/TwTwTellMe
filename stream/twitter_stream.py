@@ -21,10 +21,10 @@ from langdetect import detect
 from schema.python.tweet_pb2 import Tweet
 from protobufjson.protobuf_json import pb2json, json2pb
 from algo.geoparser import parse_location, OtherCountry, OtherState
-from algo.dataminer import find_candidate, OtherCandidate
+from algo.dataminer import find_candidates, OtherCandidate
 from algo.tweet_check import return_candidates, return_sentiment
 
-client = MongoClient()
+client = MongoClient('localhost', 27018) # new port 27018
 # collection = client['test']['testData']
 collection = client['prod']['tweet']
 
@@ -42,7 +42,7 @@ class StdOutListener(StreamListener):
 
                 if detect(text) == 'en':
 
-                    candidates = return_candidates(text)
+                    candidates = find_candidates(text)
 
                     # pprint(text)
 
