@@ -1,5 +1,7 @@
 from textblob import TextBlob
 import re
+from bs4 import BeautifulSoup
+import urllib2
 
 # internal function to remove punctuation from text and turn all characters lowercase
 
@@ -50,38 +52,37 @@ def form_cand(cand, subwords, addsubwords, wholewords, addwholewords):
         cand_sub.append(word)
     for word in addsubwords:
         cand_sub.append(word)
-	for word in wholewords:
-		cand_whole.append(word)
-	for word in addwholewords:
-		cand_whole.append(word)
-	chk.append(cand)
-	chk.append(cand_sub)
-	chk.append(cand_whole)
-	return chk
+    for word in wholewords:
+        cand_whole.append(word)
+    for word in addwholewords:
+        cand_whole.append(word)
+    chk.append(cand)
+    chk.append(cand_sub)
+    chk.append(cand_whole)
+    return chk
 
 # internal function to check text for a list of terms (both substrings and whole words)
 # input: text, lists of terms to check for in the format of [cand, list1, list2] where cand is the candidate's last name, list1 is substring matched terms, list2 is whole-word matched terms
 # output: true if at least one list has a match, false if no lists have matches
 
 def check_candidates(text, chk):
-	if chk[0] not in text:
-		return False
-	curFlag = False
-	for i in chk[1]:
-		if i in text:
-			return True
-	stext = text.split()
-	for word in stext:
-		for term in chk[2]:
-			if word == term:
-				return True
-	return False
+    if chk[0] not in text:
+        return False
+    curFlag = False
+    for i in chk[1]:
+        if i in text:
+            return True
+    stext = text.split()
+    for word in stext:
+        for term in chk[2]:
+            if word == term:
+                return True
+    return False
 
 
 # return_candidates
 # input: string containing the text of an English-language tweet (tweetText)
-# output: returns a list with 3 elements: a list of candidates associated with the tweet (empty list if none), sentiment of the tweet, subjectivity of the sentiment
-# sentiment analysis uses TextBlob sentiment analysis function, with 1 being the most positive and -1 being the most negative, and 0 as neutral
+# output: returns a list of candidates detected in the tweet
     
 def return_candidates(tweetText):
     
@@ -190,6 +191,13 @@ def return_candidates(tweetText):
     
     return candidates
 
+# return_candidates_from_link
+# input: URL
+# output: returns a list of candidates detected in the text contained within the URL
+    
+def return_candidates_from_link(url):
+    return return_candidates(BeautifulSoup(urllib2.urlopen(url)).get_text())
+
 # return_sentiment
 # input: string containing the text of an English-language tweet (tweetText)
 # output: sentiment score of tweet, per TextBlob (float of 1 to -1, with 1 being positive, 0 being neutral, and -1 being negative)
@@ -266,6 +274,15 @@ def return_themes(tweetText):
     theme.append([2, ["middle", "east"]])
     if check_theme(text, theme) is True:
         themes.append("international policy")
+        
+    # immigration
+    
+    theme = []
+    theme.append([1, ["immigration", "amnesty", "illegals", "border", "deport", "migrant", "immigrant", "deportation", "immigrants", "borders"]])
+    theme.append([2, ["dream", "act"]])
+    theme.append([2, ["illegal", "immigrant", "immigration", "illegals", "immigrants"]])
+    if check_theme(text, theme) is True:
+        themes.append("immigration")
 
     if len(themes) == 0:
         themes.append("None")
@@ -279,6 +296,9 @@ def main():
     print return_candidates("patriot values")
     print return_candidates("jindal huckabee santorum")
     print return_themes("homosexual netanyahu gun")
+    print return_candidates("rt @JebBush blah blah blah")
+    print return_candidates("right to rise bush")
+    print return_candidates_from_link("http://bit.ly/1aVF8mT")
     
 if __name__ == '__main__':
     main()
