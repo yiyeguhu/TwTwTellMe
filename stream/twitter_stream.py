@@ -15,7 +15,7 @@ import os
 
 from pprint import pprint
 
-from langdetect import detect
+# from langdetect import detect
 
 # from own packages
 from schema.python.tweet_pb2 import Tweet
@@ -41,36 +41,38 @@ class StdOutListener(StreamListener):
             if "created_at" in ob and 'text' in ob:
                 text = ob['text']
 
-                if detect(text) == 'en':
+                print ob
 
-                    candidates = find_candidates(text)
+                # if detect(text) == 'en':
 
-                    # pprint(text)
+                candidates = find_candidates(text)
 
-                    if candidates:
-                        tw = Tweet()
+                # pprint(text)
 
-                        # required fields
-                        tw.text = text
-                        tw.timestamp = int(time())
+                if candidates:
+                    tw = Tweet()
 
-                        tw.sentiment = return_sentiment(text)
+                    # required fields
+                    tw.text = text
+                    tw.timestamp = int(time())
 
-                        # optional
-                        if 'user' in ob and 'location' in ob['user']:
-                            state_name, country_name = parse_location(ob['user']['location'])
-                            if state_name != OtherState:
-                                tw.state = state_name
-                            if country_name != OtherCountry:
-                                tw.country = country_name
+                    tw.sentiment = return_sentiment(text)
 
-                        for cand in candidates:
-                            tw.candidate = cand
+                    # optional
+                    if 'user' in ob and 'location' in ob['user']:
+                        state_name, country_name = parse_location(ob['user']['location'])
+                        if state_name != OtherState:
+                            tw.state = state_name
+                        if country_name != OtherCountry:
+                            tw.country = country_name
 
-                            json_obj = pb2json(tw)
-                            collection.insert(json_obj, continue_on_error=True)
-                            # pprint(tw.SerializeToString())
-                            # pprint(json_obj)
+                    for cand in candidates:
+                        tw.candidate = cand
+
+                        json_obj = pb2json(tw)
+                        collection.insert(json_obj, continue_on_error=True)
+                        # pprint(tw.SerializeToString())
+                        # pprint(json_obj)
         except:
             pass
 
@@ -117,7 +119,6 @@ def setup_streaming(tracks):
     # auth = OAuthHandler(consumer_key, consumer_secret)
     # auth.set_access_token(access_token, access_token_secret)
 
-    print os.path.dirname(os.path.realpath(__file__)) + "/../stream/candidates.json"
     credentials = load_credentials(True, os.path.dirname(os.path.realpath(__file__)) + "/credentials.json")
     auth = tweepy_auth(credentials, user=True)
 
@@ -130,7 +131,6 @@ def setup_streaming(tracks):
 
 if __name__ == '__main__':
     # args = _parse_arguments()
-    print "hello"
     candidate_names = _get_candidate_names()
 
     setup_streaming(candidate_names)

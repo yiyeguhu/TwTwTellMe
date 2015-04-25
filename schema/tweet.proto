@@ -15,4 +15,6 @@ message Tweet {
 
     required string candidate = 5;
     optional float sentiment = 6;
+
+    optional string user = 7;
 }
