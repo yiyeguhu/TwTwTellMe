@@ -17,4 +17,5 @@ message Tweet {
     optional float sentiment = 6;
 
     optional string user_name = 7;
+    optional int32 sentiment_int = 8;
 }

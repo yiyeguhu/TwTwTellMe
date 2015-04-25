@@ -18,7 +18,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='tweet.proto',
   package='',
-  serialized_pb=_b('\n\x0btweet.proto\"\x81\x01\n\x05Tweet\x12\x0c\n\x04text\x18\x01 \x02(\t\x12\x11\n\ttimestamp\x18\x02 \x02(\x05\x12\r\n\x05state\x18\x03 \x01(\t\x12\x0f\n\x07\x63ountry\x18\x04 \x01(\t\x12\x11\n\tcandidate\x18\x05 \x02(\t\x12\x11\n\tsentiment\x18\x06 \x01(\x02\x12\x11\n\tuser_name\x18\x07 \x01(\t')
+  serialized_pb=_b('\n\x0btweet.proto\"\x98\x01\n\x05Tweet\x12\x0c\n\x04text\x18\x01 \x02(\t\x12\x11\n\ttimestamp\x18\x02 \x02(\x05\x12\r\n\x05state\x18\x03 \x01(\t\x12\x0f\n\x07\x63ountry\x18\x04 \x01(\t\x12\x11\n\tcandidate\x18\x05 \x02(\t\x12\x11\n\tsentiment\x18\x06 \x01(\x02\x12\x11\n\tuser_name\x18\x07 \x01(\t\x12\x15\n\rsentiment_int\x18\x08 \x01(\x05')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -81,6 +81,13 @@ _TWEET = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='sentiment_int', full_name='Tweet.sentiment_int', index=7,
+      number=8, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -93,7 +100,7 @@ _TWEET = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=16,
-  serialized_end=145,
+  serialized_end=168,
 )
 
 DESCRIPTOR.message_types_by_name['Tweet'] = _TWEET
