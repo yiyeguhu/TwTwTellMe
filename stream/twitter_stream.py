@@ -48,8 +48,6 @@ class StdOutListener(StreamListener):
                 text = ob['text']
 
                 if detect(text) == 'en':
-                    print ''
-                    print ob
 
                     candidates = find_candidates(text)
 
@@ -83,7 +81,8 @@ class StdOutListener(StreamListener):
                         if 'entities' in ob and 'hashtags' in ob['entities']:
                             tags = ob['entities']['hashtags']
                             for tag in tags:
-                                tw.hashtags.append(tag)
+                                if 'text' in tag:
+                                    tw.hashtags.append(tag['text'])
 
                         for cand in candidates:
                             tw.candidate = cand
