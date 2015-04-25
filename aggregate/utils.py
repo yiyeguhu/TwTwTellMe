@@ -96,7 +96,7 @@ def aggregate(starttime, endtime):
 
     try:
         for cand in candidates:
-            result['candidate_data'][cand] = get_aggregate_for_candidate(cand, starttime, endtime)
+            result['candidate_data'][cand.encode('ascii','ignore')] = get_aggregate_for_candidate(cand, starttime, endtime)
 
         return result
     except:
