@@ -78,7 +78,8 @@ def get_hashtag_stats_for_candidate(cand, starttime, endtime):
 
         if ret['ok'] == 1.0:
             sorted_result = ret['result']
-            hashtag_stats.append({sorted_result['_id']['hashtag'].encode('ascii','ignore') : sorted_result['count']})
+            for item in sorted_result:
+                hashtag_stats.append({item['_id']['hashtag'].encode('ascii','ignore') : item['count']})
 
         hashtag_stats.reverse()
     except:
