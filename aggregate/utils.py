@@ -48,6 +48,9 @@ def get_start_of_hour(timestamp):
 def get_end_of_hour(timestamp):
     return get_start_of_hour(timestamp) + 3600 - 1
 
+def increase_by_hour(timestamp):
+    return get_start_of_hour(timestamp) + 3600
+
 def unixtime_to_datetime(unixtime):
     return datetime.fromtimestamp(unixtime)
 
