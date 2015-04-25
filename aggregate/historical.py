@@ -10,7 +10,7 @@ from aggregate.utils import aggregate, get_start_of_hour, get_end_of_hour, incre
 #r_server = redis.Redis(host='198.23.67.172', password='dupont')
 
 if __name__ == '__main__':
-    # '198.23.67.172' 'password' 1429985000
+    # '198.23.67.172' 'password' 1429985000->1430000874
     h = sys.argv[1]
     p = sys.argv[2]
 
