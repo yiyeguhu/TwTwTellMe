@@ -126,10 +126,10 @@ def get_aggregate_for_candidate(cand, starttime, endtime):
     cand_info['sentiment_scores']['All States'] = all_states
 
     # (2) by state
-    sentiment_by_state = get_sentiment_stats_by_state_for_candidate(cand, starttime, endtime)
-
-    print sentiment_by_state
-    cand_info['sentiment_scores']['States'] = sentiment_by_state
+    # sentiment_by_state = get_sentiment_stats_by_state_for_candidate(cand, starttime, endtime)
+    #
+    # print sentiment_by_state
+    # cand_info['sentiment_scores']['States'] = sentiment_by_state
 
     return cand_info
 
