@@ -11,7 +11,6 @@ from aggregate.utils import aggregate, get_start_of_hour, get_end_of_hour, incre
 
 if __name__ == '__main__':
     # '198.23.67.172' 'password' 1429985000
-    # ?&{BE_3tWT]HwBgfWYKK5n={`S,!)suz
     h = sys.argv[1]
     p = sys.argv[2]
 
