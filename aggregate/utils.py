@@ -35,10 +35,21 @@ def get_start_of_hour(timestamp):
     return timestamp/3600*3600
 
 def get_sentiment_stats_for_candidate(cand, starttime, endtime):
-    filter_for_candidate  = {'$match': { 'candidate' : 'Ted Cruz', 'timestamp' : { '$gt': starttime, '$lt': endtime } } }
+    filter_for_candidate  = {'$match': { 'candidate' : cand, 'timestamp' : { '$gt': starttime, '$lt': endtime } } }
     stats = {"$group": {"_id": {"sentiment_int" : "$sentiment_int"}, "count": {"$sum": 1} } }
     pipeline = [filter_for_candidate, stats]
-    return collection.aggregate(pipeline)
+    ret = collection.aggregate(pipeline)
+
+    result = _init_sentiment_buckets()
+    if ret['ok'] == 1.0:
+        buckets = ret['result']
+        for bucket in buckets:
+            result[bucket['_id']['sentiment_int']] = bucket['count']
+
+    return result
+
+def _init_sentiment_buckets():
+    return {1:0, 2:0, 3:0, 4:0, 5:0, 6:0}
 
 def get_sentiment_stats_by_state_for_candidate():
     pass
