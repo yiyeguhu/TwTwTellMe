@@ -8,7 +8,7 @@ import json
 import argparse
 from os import environ
 
-pwd = environ['MONGOPWD']
+# pwd = environ['MONGOPWD']
 
 
 class CustomStreamListener(StreamListener):
@@ -17,8 +17,8 @@ class CustomStreamListener(StreamListener):
         self.count = 0
         self.verbose = verbose
         super(StreamListener, self).__init__()
-        self.client = pymongo.MongoClient(host="198.23.76.22", port=27017)
-        self.client.newdb.authenticate('TwTw', pwd)
+        self.client = pymongo.MongoClient(host="198.11.194.181", port=27017)
+        # self.client.newdb.authenticate('TwTw', pwd)
         self.collection = self.client.newdb.tweets
         self.create_index()
         self.counter = 0
