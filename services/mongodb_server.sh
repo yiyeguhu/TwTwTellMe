@@ -5,7 +5,7 @@
 # mongodb_server.sh start/stop/restart
 
 start() {
-  mongod --fork --dbpath /data/mongodb/ --logpath /data/log/mongodb/mongodb.log --port 27018
+  mongod --fork --dbpath /data/mongodb/ --logpath /data/log/mongodb/mongodb.log --logappend --port 27018
 }
  
 stop() {
