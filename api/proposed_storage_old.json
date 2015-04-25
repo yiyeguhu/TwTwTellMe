@@ -6,30 +6,39 @@
           "user_name": "User Name",
           "user_state": "State",
           "tweet_text": "Tweet text here",
-          "identified_themes":["theme1", "theme2"],
-          "hashtags": ["#hashtag1", "#hashtag2", "#hashtag3"],
           "sentiment_score": 6
         },
         {
           "user_name": "User Name",
           "user_state": "State",
           "tweet_text": "Tweet text here",
-          "identified_themes":["theme1", "theme2"],
-          "hashtags": ["#hashtag1", "#hashtag2", "#hashtag3"],
           "sentiment_score": 6
         }
       ],
-      "hashtags":[
-        {"hashtag": 556},
-        {"hashtag": 332},
-        {"hashtag": 272}
-      ],
       "sentiment_scores": {
-        "1": 5,
-        "2": 4,
-        "3": 4,
-        "4": 2,
-        "5": 3
+        "All States": {
+          "1": 5,
+          "2": 4,
+          "3": 4,
+          "4": 2,
+          "5": 3
+        },
+        "States": {
+          "NY": {
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 2,
+            "5": 3
+          },
+          "CA": {
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 2,
+            "5": 3
+          }
+        }
       }
     },
     "Jeb Bush": {
@@ -38,30 +47,40 @@
           "user_name": "User Name",
           "user_state": "State",
           "tweet_text": "Tweet text here",
-          "identified_themes":["theme1", "theme2"],
-          "hashtags": ["#hashtag1", "#hashtag2", "#hashtag3"],
           "sentiment_score": 6
         },
         {
           "user_name": "User Name",
           "user_state": "State",
           "tweet_text": "Tweet text here",
-          "identified_themes":["theme1", "theme2"],
-          "hashtags": ["#hashtag1", "#hashtag2", "#hashtag3"],
           "sentiment_score": 6
         }
       ],
-      "hashtags":[
-        {"hashtag": 556},
-        {"hashtag": 332},
-        {"hashtag": 272}
-      ],
       "sentiment_scores": {
-        "1": 5,
-        "2": 4,
-        "3": 4,
-        "4": 2,
-        "5": 3
+        "All States": {
+          "1": 5,
+          "2": 4,
+          "3": 4,
+          "4": 2,
+          "5": 3
+        },
+        "States": {
+          "NY": {
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 2,
+            "5": 3,
+            "6": 3
+          },
+          "CA": {
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 2,
+            "5": 3
+          }
+        }
       }
     }
   }
