@@ -81,7 +81,8 @@ def get_hashtag_stats_for_candidate(cand, starttime, endtime):
             for item in sorted_result:
                 hashtag_stats.append({item['_id']['hashtag'].encode('ascii','ignore') : item['count']})
 
-        hashtag_stats.reverse()
+        return hashtag_stats
+
     except:
         return hashtag_stats
 
