@@ -7,6 +7,8 @@ import argparse
 
 import us
 
+from bson.son import SON
+
 import sys
 
 from time import time, ctime, mktime
@@ -60,6 +62,27 @@ def unixtime_to_datetime(unixtime):
 
 def datetime_to_unixtime(dt):
     return int(mktime(dt.timetuple()))
+
+def get_hashtag_stats_for_candidate(cand, starttime, endtime):
+
+    try:
+        hashtag_stats = []
+
+        filter_for_candidate  = {'$match': { 'candidate' : cand, 'timestamp' : { '$gt': starttime, '$lt': endtime } } }
+        unwind = {"$unwind": "$hashtags"}
+        stats = {"$group": {"_id": {"hashtag" : "$hashtags"}, "count": {"$sum": 1} } }
+        sorting = {"$sort": SON([("count", -1), ("_id", -1)])}
+
+        pipeline = [filter_for_candidate, unwind, stats, sorting]
+        ret = collection.aggregate(pipeline)
+
+        if ret['ok'] == 1.0:
+            sorted_result = ret['result']
+            hashtag_stats.append({sorted_result['_id']['hashtag'].encode('ascii','ignore') : sorted_result['count']})
+
+        hashtag_stats.reverse()
+    except:
+        return hashtag_stats
 
 def get_sentiment_stats_for_candidate(cand, starttime, endtime):
 
@@ -130,6 +153,10 @@ def get_aggregate_for_candidate(cand, starttime, endtime):
     #
     # print sentiment_by_state
     # cand_info['sentiment_scores']['States'] = sentiment_by_state
+
+    # hashtag stats
+    hashtag_stats = get_hashtag_stats_for_candidate(cand, starttime, endtime)
+    cand_info['hashtags'] = hashtag_stats
 
     return cand_info
 
