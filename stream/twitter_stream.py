@@ -23,6 +23,7 @@ from protobufjson.protobuf_json import pb2json, json2pb
 from algo.geoparser import parse_location, OtherCountry, OtherState
 from algo.dataminer import find_candidates, OtherCandidate
 from algo.tweet_check import return_candidates, return_sentiment
+from utils import load_credentials, tweepy_auth
 
 client = MongoClient('127.0.0.1', 27018) # new port 27018
 # collection = client['test']['testData']
@@ -110,9 +111,14 @@ def _get_candidate_names():
 
     return candidate_names
 
-def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
-    auth = OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
+# def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
+def setup_streaming(tracks):
+
+    # auth = OAuthHandler(consumer_key, consumer_secret)
+    # auth.set_access_token(access_token, access_token_secret)
+
+    credentials = load_credentials()
+    auth = tweepy_auth(credentials, user=True)
 
     l = StdOutListener()
     stream = Stream(auth, l)
@@ -122,9 +128,11 @@ def setup_streaming(consumer_key, consumer_secret, access_token, access_token_se
     # stream.sample()
 
 if __name__ == '__main__':
-    args = _parse_arguments()
+    # args = _parse_arguments()
 
     candidate_names = _get_candidate_names()
-    setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret, candidate_names)
+
+    setup_streaming(candidate_names)
+    # setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret, candidate_names)
 
     # setup_streaming(args.consumer_key, args.consumer_secret, args.access_token, args.access_token_secret)
