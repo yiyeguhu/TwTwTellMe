@@ -27,9 +27,13 @@ from algo.dataminer import find_candidates, OtherCandidate
 from algo.tweet_check import return_candidates, return_sentiment
 from utils import load_credentials, tweepy_auth
 
-client = MongoClient('127.0.0.1', 27018) # new port 27018
+client1 = MongoClient('127.0.0.1', 27018) # new port 27018
 # collection = client['test']['testData']
-collection = client['prod']['tweet']
+collection1 = client1['prod']['tweet']
+
+# client2 = MongoClient('198.11.194.181', 27017) # new port 27018
+# # collection = client['test']['testData']
+# collection2 = client2['prod']['tweet']
 
 class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
@@ -74,7 +78,8 @@ class StdOutListener(StreamListener):
                             tw.candidate = cand
 
                             json_obj = pb2json(tw)
-                            collection.insert(json_obj, continue_on_error=True)
+                            collection1.insert(json_obj, continue_on_error=True)
+                            # collection2.insert(json_obj, continue_on_error=True)
                             # pprint(tw.SerializeToString())
                             # pprint(json_obj)
         except:
