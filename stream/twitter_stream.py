@@ -117,7 +117,7 @@ def setup_streaming(tracks):
     # auth = OAuthHandler(consumer_key, consumer_secret)
     # auth.set_access_token(access_token, access_token_secret)
 
-    credentials = load_credentials()
+    credentials = load_credentials(True, os.path.dirname(os.path.realpath(__file__)) + "/candidates.json")
     auth = tweepy_auth(credentials, user=True)
 
     l = StdOutListener()
