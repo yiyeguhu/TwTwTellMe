@@ -130,7 +130,7 @@ def setup_streaming(tracks):
 
 if __name__ == '__main__':
     # args = _parse_arguments()
-
+    print "hello"
     candidate_names = _get_candidate_names()
 
     setup_streaming(candidate_names)
