@@ -97,7 +97,6 @@ def _convert_sentiment(f): # float in [-1, 1]
         f = 1
     elif f > 6:
         f = 6
-
     return int(f)
 
 
