@@ -11,6 +11,7 @@ if __name__ == '__main__':
     start_time = get_start_of_hour(rough_start_time)
 
     while start_time < int(time.time()):
+        print 
         print start_time
         print unixtime_to_datetime(start_time)
         print aggregate(start_time, get_end_of_hour(start_time))
