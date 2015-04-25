@@ -110,4 +110,4 @@ if __name__ == '__main__':
     start_time = get_start_of_hour(rough_start_time)
     endtime = get_end_of_hour(start_time)
 
-    aggregate(start_time, endtime)
+    print aggregate(start_time, endtime)
