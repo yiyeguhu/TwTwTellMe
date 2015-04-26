@@ -32,7 +32,7 @@ from schema.python.tweet_pb2 import Tweet
 from protobufjson.protobuf_json import pb2json, json2pb
 from algo.geoparser import parse_location, OtherCountry, OtherState, states
 from algo.dataminer import find_candidates, OtherCandidate
-from algo.tweet_check import return_candidates, return_sentiment
+from algo.tweet_check import return_candidates, return_sentiment, convert_sentiment
 from stream.utils import load_credentials, tweepy_auth
 
 filename = os.path.dirname(os.path.realpath(__file__)) + "/../resources/candidates.json"
@@ -176,6 +176,12 @@ def aggregate(starttime, endtime):
 def update_sentiment_int():
     docs = collection.find()
     for doc in docs:
+        oid = doc['_id']
+        sentiment = doc['sentiment']
+        doc['sentiment_int'] = convert_sentiment(sentiment)
+        doc.pop('_id')
+
+        collection.update({'_id' : oid}, {'$set' : doc}, upsert=False)
 
 if __name__ == '__main__':
     rough_start_time = int(sys.argv[1])
