@@ -3,6 +3,8 @@ import re
 from bs4 import BeautifulSoup
 import urllib2
 
+from math import ceil
+
 # internal function to remove punctuation from text and turn all characters lowercase
 
 def clean_text(text):
@@ -80,11 +82,11 @@ def check_candidates(text, chk):
     return False
 
 
-# return_candidates
-# input: string containing the text of an English-language tweet (tweetText)
-# output: returns a list of candidates detected in the tweet
+# return_candidates_logic
+# input: string containing English-language text (tweetText)
+# output: returns a list of candidates detected in the text
     
-def return_candidates(tweetText):
+def return_candidates_logic(tweetText):
     
     text = clean_text(tweetText)
     
@@ -195,8 +197,10 @@ def return_candidates(tweetText):
 # input: URL
 # output: returns a list of candidates detected in the text contained within the URL
     
-def return_candidates_from_link(url):
-    return return_candidates(BeautifulSoup(urllib2.urlopen(url)).get_text())
+def return_candidates_from_link(tweetText):
+    url = re.search("(?P<url>https?://[^\s]+)", tweetText).group("url")
+    cand = return_candidates_logic(BeautifulSoup(urllib2.urlopen(url)).get_text())
+    return cand
 
 # return_sentiment
 # input: string containing the text of an English-language tweet (tweetText)
@@ -211,6 +215,17 @@ def return_sentiment(tweetText):
     
 def return_sentiment_from_link(url):
     return TextBlob(BeautifulSoup(urllib2.urlopen(url)).get_text()).sentiment.polarity
+
+def convert_sentiment(f): # float in [-1, 1] -> [1-5]
+    f = f + 1 # float in [0, 2]
+    f = f * 2.5 # float in [0, 5]
+    f = ceil(f)
+    if f < 1:
+        f = 1
+    elif f > 5:
+        f = 5
+    return int(f)
+
 
 # return_themes
 # input: string containing the text of an English-language tweet (tweetText)
@@ -296,12 +311,29 @@ def return_themes(tweetText):
     
     return themes
 
+
 # return_themes_from_link
 # input: URL
 # output: returns a list of themes detected in the text contained within the URL
     
 def return_candidates_from_link(url):
     return return_themes(BeautifulSoup(urllib2.urlopen(url)).get_text())
+
+
+# return_candidates
+# input: string containing the text of an English-language tweet (tweetText)
+# output: returns a list of candidates detected in the tweet or the first URL in the tweet
+
+def return_candidates(tweetText):
+    cand = []
+    cand = return_candidates_logic(tweetText)
+    if cand == []:
+        try:
+            url = re.search("(?P<url>https?://[^\s]+)", tweetText).group("url")
+            cand = return_candidates_from_link(url)
+        except:
+            pass
+    return cand
 
 
 def main():
@@ -313,7 +345,13 @@ def main():
     print return_themes("homosexual netanyahu gun")
     print return_candidates("rt @JebBush blah blah blah")
     print return_candidates("right to rise bush")
-    print return_candidates_from_link("http://bit.ly/1aVF8mT")
-    
+    print return_candidates("hi my name is what http://fakeurl.com")
+    print return_candidates("hi my name is what http://bit.ly/1aVF8mT")
+    # with the master one/url checker
+    #print return_candidates_master("i love jindal")
+    #print return_candidates_master("i love gin")
+    #print return_candidates_master("i love gin http://www.fakeurl.com")
+    #print return_candidates_master("i love gin http://bit.ly/1aVF8mT")
+
 if __name__ == '__main__':
     main()

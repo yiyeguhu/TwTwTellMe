@@ -24,12 +24,16 @@ from schema.python.tweet_pb2 import Tweet
 from protobufjson.protobuf_json import pb2json, json2pb
 from algo.geoparser import parse_location, OtherCountry, OtherState
 from algo.dataminer import find_candidates, OtherCandidate
-from algo.tweet_check import return_candidates, return_sentiment
+from algo.tweet_check import return_candidates, return_sentiment, return_themes, convert_sentiment
 from utils import load_credentials, tweepy_auth
 
-client = MongoClient('127.0.0.1', 27018) # new port 27018
+client1 = MongoClient('127.0.0.1', 27018) # new port 27018
 # collection = client['test']['testData']
-collection = client['prod']['tweet']
+collection1 = client1['prod']['tweet']
+
+# client2 = MongoClient('198.11.194.181', 27017) # new port 27018
+# # collection = client['test']['testData']
+# collection2 = client2['prod']['tweet']
 
 class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
@@ -57,7 +61,7 @@ class StdOutListener(StreamListener):
                         tw.timestamp = int(time())
 
                         tw.sentiment = return_sentiment(text)
-                        tw.sentiment_int = _convert_sentiment(tw.sentiment)
+                        tw.sentiment_int = convert_sentiment(tw.sentiment)
 
                         # optional
                         if 'user' in ob:
@@ -70,11 +74,22 @@ class StdOutListener(StreamListener):
                                 if country_name != OtherCountry:
                                     tw.country = country_name
 
+                        detected_themes = return_themes(text)
+                        for theme in detected_themes:
+                            tw.themes.append(theme)
+
+                        if 'entities' in ob and 'hashtags' in ob['entities']:
+                            tags = ob['entities']['hashtags']
+                            for tag in tags:
+                                if 'text' in tag:
+                                    tw.hashtags.append(tag['text'])
+
                         for cand in candidates:
                             tw.candidate = cand
 
                             json_obj = pb2json(tw)
-                            collection.insert(json_obj, continue_on_error=True)
+                            collection1.insert(json_obj, continue_on_error=True)
+                            # collection2.insert(json_obj, continue_on_error=True)
                             # pprint(tw.SerializeToString())
                             # pprint(json_obj)
         except:
@@ -88,17 +103,6 @@ class StdOutListener(StreamListener):
 
     def on_timeout(self):
         return True
-
-def _convert_sentiment(f): # float in [-1, 1]
-    f = f + 1 # float in [0, 2]
-    f = f * 3 # float in [0, 6]
-    f = ceil(f)
-    if f < 1:
-        f = 1
-    elif f > 6:
-        f = 6
-    return int(f)
-
 
 def _parse_arguments():
     parser = argparse.ArgumentParser()
