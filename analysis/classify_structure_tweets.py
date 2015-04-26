@@ -21,37 +21,42 @@ def convert_sent(f):
         f = 5
     return int(f)
 
-client = pymongo.MongoClient(host="198.11.194.181", port=27017)
+if __name__ == '__main__':
+    client = pymongo.MongoClient(host="198.11.194.181", port=27017)
+    dest_collection = client.newdb.processed
+    dest_collection.create_index(
+                [("id", pymongo.ASCENDING)],
+                unique=True)
+    counter = 0
+    for tweet in client.newdb.tweets.find():
+        dt = parser.parse(tweet['created_at'])
+        ht = [hashtag['text'] for hashtag in tweet['entities']['hashtags']]
+        txt = tweet['text']
+        txtht = txt + ', '.join(ht)
+        sent = return_sentiment(txtht)
+        processed = {
+            'text': txt,
+            'hashtags':ht,
+            'id': tweet['id'],
+            'user_id': tweet['user']['id'],
+            'user_name': tweet['user']['name'],
+            'screen_name': tweet['user']['screen_name'],
+            'raw_location': tweet['user'].get('location', 'not specified'),
+            'candidate': return_candidates(txtht),
+            'sentiment': sent,
+            'sentiment_int': convert_sent(sent),
+            'themes': return_themes(txtht),
+            'timestamp': calendar.timegm(dt.timetuple())
+        }
 
-counter = 0
-for tweet in client.newdb.tweets.find():
-    dt = parser.parse(tweet['created_at'])
-    ht = [hashtag['text'] for hashtag in tweet['entities']['hashtags']]
-    txt = tweet['text']
-    txtht = txt + ', '.join(ht)
-    sent = return_sentiment(txtht)
-    processed = {
-        'text': txt,
-        'hashtags':ht,
-        'id': tweet['id'],
-        'user_id': tweet['user']['id'],
-        'user_name': tweet['user']['name'],
-        'screen_name': tweet['user']['screen_name'],
-        'raw_location': tweet['user'].get('location', 'not specified'),
-        'candidate': return_candidates(txtht),
-        'sentiment': sent,
-        'sentiment_int': convert_sent(sent),
-        'themes': return_themes(txtht),
-        'timestamp': calendar.timegm(dt.timetuple())
-    }
-    try:
-        client.newdb.processed_tweets.insert(processed, continue_on_error=True)
-        counter += 1
-        if not counter % 100:
-            print counter
-    except pymongo.errors.DuplicateKeyError:
-        print 'duplicate key - skipping'
+        try:
+            client.newdb.processed.insert(processed, continue_on_error=True)
+            counter += 1
+            if not counter % 100:
+                print counter
+        except pymongo.errors.DuplicateKeyError:
+            print 'duplicate key - skipping'
 
-    tweet['processed'] = True
-    client.newdb.tweets.update({'_id': tweet['_id']}, {"$set": tweet}, upsert=False)
+        tweet['processed'] = True
+        client.newdb.tweets.update({'_id': tweet['_id']}, {"$set": tweet}, upsert=False)
 
