@@ -7,6 +7,7 @@ import time
 import redis
 import numpy as np
 from api_auth import load_credentials
+import json
 
 app = Flask(__name__)
 runner = Runner(app)
@@ -67,21 +68,27 @@ class Tweets(Resource):
              "sentiment_score": 6}
         ]
 
-
-class RedisProd(Resource):
+class RedisInfo(Resource):
     r_server = redis.Redis(host=load_credentials('redis')['host'], password=load_credentials('redis')['password'])
     keys_we_have = r_server.keys()
     min_ts = int(min(keys_we_have))
     max_ts = int(max(keys_we_have))
 
-    def get(self, start_ts=min_ts, end_ts=max_ts):
+    def get(self):
+        return [self.min_ts, self.max_ts]
+
+class RedisProd(Resource):
+    r_server = redis.Redis(host=load_credentials('redis')['host'], password=load_credentials('redis')['password'])
+
+    def get(self, start_ts, end_ts):
         sec_incr = 3600
         real_start = start_ts-start_ts % sec_incr
         keys_to_get = list(np.arange(real_start, end_ts+1, sec_incr))
-
-        print keys_to_get
-
+        #print keys_to_get
         data = self.r_server.mget(keys_to_get)
+
+        data = data[0].replace("'", "\"")
+        #print json.loads(data[0].replace("'", "\""))
 
         return data
 
@@ -185,12 +192,13 @@ class RedisTest(Resource):
     def get(self, posixtime):
         data = self.r_server.get(posixtime)
         return {'success': data}
-'''
+
 # API ROUTING
 api.add_resource(Viz, '/viz')
 api.add_resource(Tweets, '/tweets')
 api.add_resource(RedisTest, '/redis-test/<float:posixtime>')
+api.add_resource(RedisInfo, '/redis-info/')
+api.add_resource(RedisProd, '/redis-prod/<int:start_ts>&<int:end_ts>')
 
 if __name__ == "__main__":
     runner.run()
-'''
