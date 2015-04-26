@@ -5,6 +5,8 @@ import fake_generator
 import datetime
 import time
 import redis
+import numpy as np
+from getpass import getpass
 
 app = Flask(__name__)
 runner = Runner(app)
@@ -64,6 +66,27 @@ class Tweets(Resource):
              "tweet_text": "Tweet text here",
              "sentiment_score": 6}
         ]
+
+
+class RedisProd(Resource):
+    r_server = redis.Redis(host='198.23.67.172', password=getpass())
+    keys_we_have = r_server.keys()
+    min_ts = int(min(keys_we_have))
+    max_ts = int(max(keys_we_have))
+
+    def get(self, start_ts=min_ts, end_ts=max_ts):
+        sec_incr = 3600
+        real_start = start_ts-start_ts % sec_incr
+        keys_to_get = list(np.arange(real_start, end_ts+1, sec_incr))
+
+        print keys_to_get
+
+        data = self.r_server.mget(keys_to_get)
+
+        return data
+
+        #data = self.r_server.get(posixtime)
+        #return {'success': data}
 
 class RedisTest(Resource):
     r_server = redis.Redis(host='198.23.67.172', password='dupont')
@@ -162,7 +185,7 @@ class RedisTest(Resource):
     def get(self, posixtime):
         data = self.r_server.get(posixtime)
         return {'success': data}
-
+'''
 # API ROUTING
 api.add_resource(Viz, '/viz')
 api.add_resource(Tweets, '/tweets')
@@ -170,3 +193,4 @@ api.add_resource(RedisTest, '/redis-test/<float:posixtime>')
 
 if __name__ == "__main__":
     runner.run()
+'''
