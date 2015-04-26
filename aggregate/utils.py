@@ -70,6 +70,8 @@ def aggregate_tweets_for_candidate(cand, starttime, endtime):
 
         ret = collection.find({'candidate' : cand, 'timestamp' : { '$gt': starttime, '$lt': endtime }}, {'user_name':1, 'state':1, 'text':1, 'themes':1, 'hashtags':1, 'sentiment_int':1, '_id':0})
 
+        print ret.count()
+
         for doc in ret:
             item = {}
             if 'user_name' in doc:
