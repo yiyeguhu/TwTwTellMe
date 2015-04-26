@@ -6,7 +6,7 @@ import datetime
 import time
 import redis
 import numpy as np
-from getpass import getpass
+from api_auth import load_credentials
 
 app = Flask(__name__)
 runner = Runner(app)
@@ -69,7 +69,7 @@ class Tweets(Resource):
 
 
 class RedisProd(Resource):
-    r_server = redis.Redis(host='198.23.67.172', password=getpass())
+    r_server = redis.Redis(host=load_credentials('redis')['host'], password=load_credentials('redis')['password'])
     keys_we_have = r_server.keys()
     min_ts = int(min(keys_we_have))
     max_ts = int(max(keys_we_have))
