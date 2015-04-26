@@ -11,8 +11,8 @@ client = pymongo.MongoClient(host="198.11.194.181", port=27017)
 # client.newdb.authenticate('TwTw', pwd)
 
 for tweet in client.newdb.tweets.find()[0:50]:
-    dt = datetime.strptime(tweet['created_at'],'%a %b %d %H:%M:%S %z %Y')  # .replace(tzinfo=tzoffset(None, -14400))
-    print dt
+    dt = datetime.strptime(tweet['created_at'],'%a %b %d %H:%M:%S +0000 %Y')
+    print tweet['created_at'], dt
     ht = [hashtag['text'] for hashtag in tweet['entities']['hashtags']]
     txt = tweet['text']
     txtht = txt + ', '.join(ht)
