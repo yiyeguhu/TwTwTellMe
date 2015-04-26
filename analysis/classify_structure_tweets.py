@@ -49,7 +49,8 @@ for tweet in client.newdb.tweets.find()[0:50]:
     try:
         client.newdb.processed_tweets.insert(processed, continue_on_error=True)
         counter += 1
-        print counter
+        if not counter % 100:
+            print counter
     except pymongo.errors.DuplicateKeyError:
         print 'duplicate key - skipping'
 
