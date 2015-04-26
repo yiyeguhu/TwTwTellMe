@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     while start_time < int(time.time()):
         print start_time
-        unixtime_to_datetime(start_time)
+        # unixtime_to_datetime(start_time)
         hour_data = aggregate(start_time, get_end_of_hour(start_time))
 
         r.set(str(start_time), hour_data)

@@ -24,7 +24,8 @@ if __name__ == '__main__':
         r.set(str(starttime), hour_data)
 
         print currenttime
-        unixtime_to_datetime(currenttime)
-        unixtime_to_datetime(starttime)
+        print unixtime_to_datetime(currenttime)
+        print unixtime_to_datetime(starttime)
+        print ""
 
         time.sleep(5)
