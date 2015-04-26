@@ -104,14 +104,14 @@ class StdOutListener(StreamListener):
     def on_timeout(self):
         return True
 
-def _convert_sentiment(f): # float in [-1, 1]
+def _convert_sentiment(f): # float in [-1, 1] -> [1-5]
     f = f + 1 # float in [0, 2]
-    f = f * 3 # float in [0, 6]
+    f = f * 2.5 # float in [0, 5]
     f = ceil(f)
     if f < 1:
         f = 1
-    elif f > 6:
-        f = 6
+    elif f > 5:
+        f = 5
     return int(f)
 
 
