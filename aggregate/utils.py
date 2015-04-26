@@ -63,6 +63,33 @@ def unixtime_to_datetime(unixtime):
 def datetime_to_unixtime(dt):
     return int(mktime(dt.timetuple()))
 
+def aggregate_tweets_for_candidate(cand, starttime, endtime):
+
+    try:
+        result = []
+
+        ret = collection.find({'candidate' : cand, 'timestamp' : { '$gt': starttime, '$lt': endtime }}, {'user_name':1, 'state':1, 'text':1, 'themes':1, 'hashtags':1, 'sentiment_int':1, '_id':0})
+
+        for doc in ret:
+            item = {}
+            if 'user_name' in doc:
+                item['user_name'] = doc['user_name']
+            if 'state' in doc:
+                item['user_state'] = doc['state']
+            if 'text' in doc:
+                item['tweet_text'] = doc['text']
+            if 'themes' in doc:
+                item['identified_themes'] = doc['themes']
+            if 'hashtags' in doc:
+                item['hashtags'] = doc['hashtags']
+            if 'sentiment_int' in doc:
+                item['sentiment_score'] = doc['sentiment_int']
+            result.append(item)
+
+        return result
+    except:
+        return _init_sentiment_buckets()
+
 def get_hashtag_stats_for_candidate(cand, starttime, endtime):
 
     try:
@@ -144,6 +171,8 @@ def get_aggregate_for_candidate(cand, starttime, endtime):
     cand_info = {"tweets":{}, "sentiment_scores": {}}
 
     # tweets
+    tweets = aggregate_tweets_for_candidate(cand, starttime, endtime)
+    cand_info['tweets'] = tweets
 
     # sentiment:
      # (1)all states
