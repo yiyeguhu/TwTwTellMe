@@ -210,10 +210,11 @@ def return_sentiment(tweetText):
     return TextBlob(tweetText).sentiment.polarity
 
 # return_sentiment_from_link
-# input: URL
-# output: returns sentiment score of URL content, per TextBlob
+# input: tweet text
+# output: returns sentiment score of URL content detected within tweet, per TextBlob
     
-def return_sentiment_from_link(url):
+def return_sentiment_from_link(tweetText):
+    url = re.search("(?P<url>https?://[^\s]+)", tweetText).group("url")
     return TextBlob(BeautifulSoup(urllib2.urlopen(url)).get_text()).sentiment.polarity
 
 #def convert_sentiment(f): # float in [-1, 1] -> [1-5]
@@ -326,10 +327,11 @@ def return_themes(tweetText):
 
 
 # return_themes_from_link
-# input: URL
-# output: returns a list of themes detected in the text contained within the URL
+# input: tweet text
+# output: returns a list of themes detected in URLs detected within the tweet
     
-def return_candidates_from_link(url):
+def return_candidates_from_link(tweetText):
+    url = re.search("(?P<url>https?://[^\s]+)", tweetText).group("url")
     return return_themes(BeautifulSoup(urllib2.urlopen(url)).get_text())
 
 
