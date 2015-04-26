@@ -21,12 +21,10 @@ def convert_sent(f):
         f = 5
     return int(f)
 
-pwd = environ['MONGOPWD']
-
 client = pymongo.MongoClient(host="198.11.194.181", port=27017)
 
 counter = 0
-for tweet in client.newdb.tweets.find()[0:50]:
+for tweet in client.newdb.tweets.find():
     dt = parser.parse(tweet['created_at'])
     ht = [hashtag['text'] for hashtag in tweet['entities']['hashtags']]
     txt = tweet['text']
