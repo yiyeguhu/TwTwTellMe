@@ -106,7 +106,7 @@ def get_sentiment_stats_for_candidate(cand, starttime, endtime):
         return _init_sentiment_buckets()
 
 def _init_sentiment_buckets():
-    return {'1':0, '2':0, '3':0, '4':0, '5':0, '6':0}
+    return {'1':0, '2':0, '3':0, '4':0, '5':0}
 
 def get_sentiment_stats_by_state_for_candidate(cand, starttime, endtime):
 

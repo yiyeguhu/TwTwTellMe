@@ -21,12 +21,10 @@ if __name__ == '__main__':
     r = redis.Redis(host=h, password=p)
 
     while start_time < int(time.time()):
-        print ""
         print start_time
         unixtime_to_datetime(start_time)
         hour_data = aggregate(start_time, get_end_of_hour(start_time))
 
-        print hour_data
         r.set(str(start_time), hour_data)
 
         start_time = increase_by_hour(start_time)
