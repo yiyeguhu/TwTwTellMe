@@ -78,11 +78,11 @@ def aggregate_tweets_for_candidate(cand, starttime, endtime):
             if 'user_name' in doc:
                 item['user_name'] = doc['user_name']
             if 'state' in doc:
-                item['user_state'] = doc['state'].encode('ascii','ignore')
+                item['user_state'] = doc['state']
             if 'text' in doc:
                 item['tweet_text'] = doc['text']
             if 'themes' in doc:
-                item['identified_themes'] = doc['themes'].encode('ascii','ignore')
+                item['identified_themes'] = doc['themes']
             if 'hashtags' in doc:
                 item['hashtags'] = doc['hashtags']
             if 'sentiment_int' in doc:
