@@ -209,6 +209,13 @@ def return_candidates_from_link(tweetText):
 def return_sentiment(tweetText):
     return TextBlob(tweetText).sentiment.polarity
 
+# return_sentiment_from_link
+# input: URL
+# output: returns sentiment score of URL content, per TextBlob
+    
+def return_sentiment_from_link(url):
+    return TextBlob(BeautifulSoup(urllib2.urlopen(url)).get_text()).sentiment.polarity
+
 def convert_sentiment(f): # float in [-1, 1] -> [1-5]
     f = f + 1 # float in [0, 2]
     f = f * 2.5 # float in [0, 5]
@@ -218,6 +225,7 @@ def convert_sentiment(f): # float in [-1, 1] -> [1-5]
     elif f > 5:
         f = 5
     return int(f)
+
 
 # return_themes
 # input: string containing the text of an English-language tweet (tweetText)
@@ -303,6 +311,15 @@ def return_themes(tweetText):
     
     return themes
 
+
+# return_themes_from_link
+# input: URL
+# output: returns a list of themes detected in the text contained within the URL
+    
+def return_candidates_from_link(url):
+    return return_themes(BeautifulSoup(urllib2.urlopen(url)).get_text())
+
+
 # return_candidates
 # input: string containing the text of an English-language tweet (tweetText)
 # output: returns a list of candidates detected in the tweet or the first URL in the tweet
@@ -317,6 +334,7 @@ def return_candidates(tweetText):
         except:
             pass
     return cand
+
 
 def main():
     print return_candidates("Rubio's fish tacos")
