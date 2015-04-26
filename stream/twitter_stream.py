@@ -24,7 +24,7 @@ from schema.python.tweet_pb2 import Tweet
 from protobufjson.protobuf_json import pb2json, json2pb
 from algo.geoparser import parse_location, OtherCountry, OtherState
 from algo.dataminer import find_candidates, OtherCandidate
-from algo.tweet_check import return_candidates, return_sentiment, return_themes
+from algo.tweet_check import return_candidates, return_sentiment, return_themes, convert_sentiment
 from utils import load_credentials, tweepy_auth
 
 client1 = MongoClient('127.0.0.1', 27018) # new port 27018
@@ -61,7 +61,7 @@ class StdOutListener(StreamListener):
                         tw.timestamp = int(time())
 
                         tw.sentiment = return_sentiment(text)
-                        tw.sentiment_int = _convert_sentiment(tw.sentiment)
+                        tw.sentiment_int = convert_sentiment(tw.sentiment)
 
                         # optional
                         if 'user' in ob:
@@ -103,17 +103,6 @@ class StdOutListener(StreamListener):
 
     def on_timeout(self):
         return True
-
-def _convert_sentiment(f): # float in [-1, 1] -> [1-5]
-    f = f + 1 # float in [0, 2]
-    f = f * 2.5 # float in [0, 5]
-    f = ceil(f)
-    if f < 1:
-        f = 1
-    elif f > 5:
-        f = 5
-    return int(f)
-
 
 def _parse_arguments():
     parser = argparse.ArgumentParser()

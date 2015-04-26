@@ -173,6 +173,10 @@ def aggregate(starttime, endtime):
     except:
         return {'candidate_data':{}}
 
+def update_sentiment_int():
+    docs = collection.find()
+    for doc in docs:
+
 if __name__ == '__main__':
     rough_start_time = int(sys.argv[1])
     print rough_start_time

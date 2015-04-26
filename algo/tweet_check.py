@@ -3,6 +3,8 @@ import re
 from bs4 import BeautifulSoup
 import urllib2
 
+from math import ceil
+
 # internal function to remove punctuation from text and turn all characters lowercase
 
 def clean_text(text):
@@ -206,6 +208,16 @@ def return_candidates_from_link(tweetText):
 
 def return_sentiment(tweetText):
     return TextBlob(tweetText).sentiment.polarity
+
+def convert_sentiment(f): # float in [-1, 1] -> [1-5]
+    f = f + 1 # float in [0, 2]
+    f = f * 2.5 # float in [0, 5]
+    f = ceil(f)
+    if f < 1:
+        f = 1
+    elif f > 5:
+        f = 5
+    return int(f)
 
 # return_themes
 # input: string containing the text of an English-language tweet (tweetText)
