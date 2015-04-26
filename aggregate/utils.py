@@ -68,10 +68,10 @@ def aggregate_tweets_for_candidate(cand, starttime, endtime):
     try:
         result = []
 
-        f = {'candidate' : cand, 'timestamp' : { '$gt': starttime, '$lt': endtime }}
-        pr = {'user_name':1, 'state':1, 'text':1, 'themes':1, 'hashtags':1, 'sentiment_int':1, '_id':0}
+        # f = {'candidate' : cand, 'timestamp' : { '$gt': starttime, '$lt': endtime }}
+        # pr = {'user_name':1, 'state':1, 'text':1, 'themes':1, 'hashtags':1, 'sentiment_int':1, '_id':0}
 
-        ret = collection.find(filter=f, projection=pr, limit=100)
+        ret = collection.find({'candidate' : cand, 'timestamp' : { '$gt': starttime, '$lt': endtime }}, {'user_name':1, 'state':1, 'text':1, 'themes':1, 'hashtags':1, 'sentiment_int':1, '_id':0}, limit=100)
 
         for doc in ret:
             item = {}
