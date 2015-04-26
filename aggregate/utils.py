@@ -175,13 +175,18 @@ def aggregate(starttime, endtime):
 
 def update_sentiment_int():
     docs = collection.find()
+    c = 1
     for doc in docs:
+        print c
+
         oid = doc['_id']
         sentiment = doc['sentiment']
         doc['sentiment_int'] = convert_sentiment(sentiment)
-        doc.pop('_id')
+        del doc['_id']
 
         collection.update({'_id' : oid}, {'$set' : doc}, upsert=False)
+
+        c += 1
 
 if __name__ == '__main__':
     rough_start_time = int(sys.argv[1])
