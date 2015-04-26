@@ -88,7 +88,7 @@ def aggregate_tweets_for_candidate(cand, starttime, endtime):
 
         return result
     except:
-        return _init_sentiment_buckets()
+        return []
 
 def get_hashtag_stats_for_candidate(cand, starttime, endtime):
 
