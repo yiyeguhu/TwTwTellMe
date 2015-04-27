@@ -3,6 +3,8 @@ __author__ = 'tamao'
 import sys
 import time
 
+import json
+
 import redis
 
 from aggregate.utils import aggregate, get_start_of_hour, get_end_of_hour, increase_by_hour, unixtime_to_datetime
@@ -21,7 +23,7 @@ if __name__ == '__main__':
         starttime = get_start_of_hour(currenttime)
 
         hour_data = aggregate(starttime, currenttime)
-        r.set(str(starttime), hour_data)
+        r.set(str(starttime), json.dumps(hour_data))
 
         print currenttime
         print unixtime_to_datetime(currenttime)

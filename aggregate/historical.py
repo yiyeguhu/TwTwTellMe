@@ -5,6 +5,8 @@ import time
 
 import redis
 
+import json
+
 from aggregate.utils import aggregate, get_start_of_hour, get_end_of_hour, increase_by_hour, unixtime_to_datetime
 
 #r_server = redis.Redis(host='198.23.67.172', password='dupont')
@@ -26,6 +28,6 @@ if __name__ == '__main__':
         # unixtime_to_datetime(start_time)
         hour_data = aggregate(start_time, get_end_of_hour(start_time))
 
-        r.set(str(start_time), hour_data)
+        r.set(str(start_time), json.dumps(hour_data))
 
         start_time = increase_by_hour(start_time)
