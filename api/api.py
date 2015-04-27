@@ -75,6 +75,7 @@ class RedisProd(Resource):
     max_ts = int(max(keys_we_have))
 
     def get(self, start_ts=min_ts, end_ts=max_ts):
+        print start_ts, end_ts
         sec_incr = 3600
         real_start = start_ts-start_ts % sec_incr
         keys_to_get = list(np.arange(real_start, end_ts+1, sec_incr))
@@ -185,12 +186,12 @@ class RedisTest(Resource):
     def get(self, posixtime):
         data = self.r_server.get(posixtime)
         return {'success': data}
-'''
+
 # API ROUTING
 api.add_resource(Viz, '/viz')
 api.add_resource(Tweets, '/tweets')
 api.add_resource(RedisTest, '/redis-test/<float:posixtime>')
+api.add_resource(RedisProd, '/redis-prod/<int:start_ts>&<int:end_ts>')
 
 if __name__ == "__main__":
     runner.run()
-'''
