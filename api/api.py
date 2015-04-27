@@ -5,6 +5,10 @@ import fake_generator
 import datetime
 import time
 import redis
+import numpy as np
+from api_auth import load_credentials
+import json
+from ast import literal_eval
 
 app = Flask(__name__)
 runner = Runner(app)
@@ -64,6 +68,32 @@ class Tweets(Resource):
              "tweet_text": "Tweet text here",
              "sentiment_score": 6}
         ]
+
+class RedisInfo(Resource):
+    r_server = redis.Redis(host=load_credentials('redis')['host'], password=load_credentials('redis')['password'])
+    keys_we_have = r_server.keys()
+    min_ts = int(min(keys_we_have))
+    max_ts = int(max(keys_we_have))
+
+    def get(self):
+        return [self.min_ts, self.max_ts]
+
+class RedisProd(Resource):
+    r_server = redis.Redis(host=load_credentials('redis')['host'], password=load_credentials('redis')['password'])
+
+    def get(self, start_ts, end_ts):
+        sec_incr = 3600
+        real_start = start_ts-start_ts % sec_incr
+        keys_to_get = list(np.arange(real_start, end_ts+1, sec_incr))
+        #print keys_to_get
+        data = self.r_server.mget(keys_to_get)
+        data = literal_eval(data[0])
+        print data
+
+        return data
+
+        #data = self.r_server.get(posixtime)
+        #return {'success': data}
 
 class RedisTest(Resource):
     r_server = redis.Redis(host='198.23.67.172', password='dupont')
@@ -167,6 +197,8 @@ class RedisTest(Resource):
 api.add_resource(Viz, '/viz')
 api.add_resource(Tweets, '/tweets')
 api.add_resource(RedisTest, '/redis-test/<float:posixtime>')
+api.add_resource(RedisInfo, '/redis-info/')
+api.add_resource(RedisProd, '/redis-prod/<int:start_ts>&<int:end_ts>')
 
 if __name__ == "__main__":
     runner.run()
