@@ -8,6 +8,7 @@ import redis
 import numpy as np
 from api_auth import load_credentials
 import json
+from ast import literal_eval
 
 app = Flask(__name__)
 runner = Runner(app)
@@ -86,9 +87,8 @@ class RedisProd(Resource):
         keys_to_get = list(np.arange(real_start, end_ts+1, sec_incr))
         #print keys_to_get
         data = self.r_server.mget(keys_to_get)
-
-        data = data[0].replace("'", "\"")
-        #print json.loads(data[0].replace("'", "\""))
+        data = literal_eval(data[0])
+        print data
 
         return data
 
