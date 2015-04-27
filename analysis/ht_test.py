@@ -1,5 +1,4 @@
 import pymongo
-from dateutil import parser
 
 if __name__ == '__main__':
     client = pymongo.MongoClient(host="198.11.194.181", port=27017)
