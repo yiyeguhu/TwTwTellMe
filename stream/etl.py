@@ -45,8 +45,11 @@ if __name__ == '__main__':
         print starttime
         time2 = get_end_of_hour(starttime) if get_end_of_hour(starttime) < endtime else endtime
 
-        results = collection0.find({'timestamp_ms': {'$gt': str(starttime*1000), '$lt': str(time2*1000)}}, {'_id':0})
-        for item in results:
-            online_process(item)
+        inserts = []
+
+        returns = collection0.find({'timestamp_ms': {'$gt': str(starttime*1000), '$lt': str(time2*1000)}}, {'_id':0})
+        for item in returns:
+            ret = online_process(item)
+            inserts.extend(ret)
 
         starttime = increase_by_hour(starttime)

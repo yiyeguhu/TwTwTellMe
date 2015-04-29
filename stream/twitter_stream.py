@@ -33,10 +33,10 @@ collection0 = client0['newdb']['tweets']
 
 client1 = MongoClient('127.0.0.1', 27018) # new port 27018
 # collection = client['test']['testData']
-collection1 = client1['prod']['tweet']
+collection1 = client1['test']['tweet']
 
 client2 = MongoClient('198.11.194.181', 27017)
-collection2 = client2['prod']['tweet']
+collection2 = client2['test']['tweet']
 
 
 class StdOutListener(StreamListener):
@@ -47,7 +47,11 @@ class StdOutListener(StreamListener):
     def on_data(self, data):
         try:
             ob = json.loads(data)
-            online_process(ob)
+            inserts = online_process(ob)
+
+            for insert in inserts:
+                collection1.insert(insert, continue_on_error=True)
+                collection2.insert(insert, continue_on_error=True)
         except:
             pass
 
@@ -89,6 +93,8 @@ def _get_candidate_names():
     return candidate_names
 
 def online_process(ob):
+    result = []
+
     if "created_at" in ob and 'text' in ob:
         text = ob['text']
 
@@ -113,7 +119,7 @@ def online_process(ob):
                     if 'screen_name' in ob['user']:
                         tw.user_name = ob['user']['screen_name']
                     if 'location' in ob['user']:
-                        state_name, country_name = parse_location(ob['user']['location'])
+                        state_name, country_name = parse_location(ob['user']['location'], timeout=10)
                         if state_name != OtherState:
                             tw.state = state_name
                         if country_name != OtherCountry:
@@ -131,10 +137,10 @@ def online_process(ob):
 
                 for cand in candidates:
                     tw.candidate = cand
+                    result.append(pb2json(tw))
 
-                    json_obj = pb2json(tw)
-                    collection1.insert(json_obj, continue_on_error=True)
-                    collection2.insert(json_obj, continue_on_error=True)
+    return result
+
 
 # def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
 def setup_streaming(tracks):
