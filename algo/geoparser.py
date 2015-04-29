@@ -83,7 +83,7 @@ def parse_address(addr):
 def parse_location(loc):
     state, country = OtherState, OtherCountry
 
-    stdloc = geolocator.geocode(loc, timeout=10)
+    stdloc = geolocator.geocode(loc)
     if stdloc is not None:
         state, country = parse_address(stdloc.address)
 
