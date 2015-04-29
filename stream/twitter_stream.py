@@ -37,6 +37,7 @@ collection1 = client1['test']['tweet']
 
 client2 = MongoClient('198.11.194.181', 27017)
 collection2 = client2['test']['tweet']
+collection3 = client2['newdb']['tweets']
 
 
 class StdOutListener(StreamListener):
@@ -113,15 +114,15 @@ def online_process(ob):
                     if 'screen_name' in ob['user']:
                         tw.user_name = ob['user']['screen_name']
 
-                    try:
-                        if 'location' in ob['user']:
-                            state_name, country_name = parse_location(ob['user']['location'])
-                            if state_name != OtherState:
-                                tw.state = state_name
-                            if country_name != OtherCountry:
-                                tw.country = country_name
-                    except:
-                        print "Some exception"
+                    # try:
+                    #     if 'location' in ob['user']:
+                    #         state_name, country_name = parse_location(ob['user']['location'])
+                    #         if state_name != OtherState:
+                    #             tw.state = state_name
+                    #         if country_name != OtherCountry:
+                    #             tw.country = country_name
+                    # except:
+                    #     print "Geocoder exception"
 
                 detected_themes = return_themes(text)
                 for theme in detected_themes:

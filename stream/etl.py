@@ -31,7 +31,7 @@ from utils import load_credentials, tweepy_auth
 
 from aggregate.utils import aggregate, get_start_of_hour, get_end_of_hour, increase_by_hour, unixtime_to_datetime
 
-from twitter_stream import online_process, collection0, collection1, collection2
+from twitter_stream import online_process, collection0, collection1, collection2, collection3
 
 # collection0 -> ETL -> collection2
 
@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
         inserts = []
 
-        returns = collection0.find({'timestamp_ms': {'$gt': str(starttime*1000), '$lt': str(time2*1000)}}, {'_id':0})
+        returns = collection3.find({'timestamp_ms': {'$gt': str(starttime*1000), '$lt': str(time2*1000)}}, {'_id':0})
         for item in returns:
             try:
                 online_process(item)
