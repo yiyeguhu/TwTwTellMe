@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
         inserts = []
 
-        returns = collection3.find({'timestamp_ms': {'$gt': str(starttime*1000), '$lt': str(time2*1000)}}, {'_id':0})
+        returns = collection0.find({'timestamp_ms': {'$gt': str(starttime*1000), '$lt': str(time2*1000)}}, {'_id':0})
         for item in returns:
             try:
                 online_process(item)
