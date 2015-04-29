@@ -27,12 +27,16 @@ from algo.dataminer import find_candidates, OtherCandidate
 from algo.tweet_check import return_candidates, return_sentiment, return_themes, convert_sentiment
 from utils import load_credentials, tweepy_auth
 
+client0 = MongoClient('127.0.0.1')
+client0.the_database.authenticate('admin', 'QS6TnHlb', source='admin')
+collection0 = client0['newdb']['tweets']
+
 client1 = MongoClient('127.0.0.1', 27018) # new port 27018
 # collection = client['test']['testData']
-collection1 = client1['prod']['tweet']
+collection1 = client1['test']['tweet']
 
 client2 = MongoClient('198.11.194.181', 27017)
-collection2 = client2['prod']['tweet']
+collection2 = client2['test']['tweet']
 
 class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
@@ -42,7 +46,7 @@ class StdOutListener(StreamListener):
     def on_data(self, data):
         try:
             ob = json.loads(data)
-            _online_process(ob)
+            online_process(ob)
         except:
             pass
 
@@ -83,7 +87,7 @@ def _get_candidate_names():
 
     return candidate_names
 
-def _online_process(ob):
+def online_process(ob):
     if "created_at" in ob and 'text' in ob:
         text = ob['text']
 
