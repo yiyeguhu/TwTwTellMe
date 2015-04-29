@@ -13,7 +13,7 @@ from aggregate.utils import aggregate, get_start_of_hour, get_end_of_hour, incre
 
 if __name__ == '__main__':
     # [redis-hostname] [redis-pw] [starttime]
-    # '198.23.67.172' 'password' 1429985000->1430002054(hashtags)
+    # '198.23.67.172' 'password' 1429985000->1430002054(hashtags)->142999784(ETL from Mongo Cluster)
     h = sys.argv[1]
     p = sys.argv[2]
 

@@ -33,10 +33,10 @@ collection0 = client0['newdb']['tweets']
 
 client1 = MongoClient('127.0.0.1', 27018) # new port 27018
 # collection = client['test']['testData']
-collection1 = client1['prod']['tweet']
+collection1 = client1['test']['tweet']
 
 client2 = MongoClient('198.11.194.181')
-collection2 = client2['prod']['tweet']
+collection2 = client2['test']['tweet']
 collection3 = client2['newdb']['tweets']
 
 
@@ -104,7 +104,8 @@ def online_process(ob):
 
                 # required fields
                 tw.text = text
-                tw.timestamp = int(time())
+                # tw.timestamp = int(time())
+                tw.timestamp = int(ob['timestamp_ms'])/1000
 
                 tw.sentiment = return_sentiment(text)
                 tw.sentiment_int = convert_sentiment(tw.sentiment)
