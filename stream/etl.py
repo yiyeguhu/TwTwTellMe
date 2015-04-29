@@ -52,7 +52,7 @@ if __name__ == '__main__':
             ret = online_process(item)
             inserts.extend(ret)
 
-        collection1
-        collection2
+        collection1.insert(inserts)
+        collection2.insert(inserts)
 
         starttime = increase_by_hour(starttime)
