@@ -40,8 +40,8 @@ collection2 = client2['prod']['tweet']
 if __name__ == '__main__':
     # starttime endtime
     # 1430002054 1430281000
-    starttime = sys.argv[1]
-    endtime = sys.argv[2]
+    starttime = int(sys.argv[1])
+    endtime = int(sys.argv[2])
 
     while starttime < endtime:
         print starttime
