@@ -31,7 +31,7 @@ from utils import load_credentials, tweepy_auth
 
 from aggregate.utils import aggregate, get_start_of_hour, get_end_of_hour, increase_by_hour, unixtime_to_datetime
 
-from stream.twitter_stream import online_process, collection0, collection2
+from twitter_stream import online_process, collection0, collection2
 
 # collection0 -> ETL -> collection2
 
