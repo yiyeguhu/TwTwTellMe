@@ -33,10 +33,10 @@ collection0 = client0['newdb']['tweets']
 
 client1 = MongoClient('127.0.0.1', 27018) # new port 27018
 # collection = client['test']['testData']
-collection1 = client1['prod']['tweet']
+collection1 = client1['test']['tweet']
 
 client2 = MongoClient('198.11.194.181', 27017)
-collection2 = client2['prod']['tweet']
+collection2 = client2['test']['tweet']
 
 
 class StdOutListener(StreamListener):

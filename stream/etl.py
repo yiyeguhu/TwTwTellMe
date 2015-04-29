@@ -49,10 +49,6 @@ if __name__ == '__main__':
 
         returns = collection0.find({'timestamp_ms': {'$gt': str(starttime*1000), '$lt': str(time2*1000)}}, {'_id':0})
         for item in returns:
-            ret = online_process(item)
-            inserts.extend(ret)
-
-        collection1.insert(inserts)
-        collection2.insert(inserts)
+            online_process(item)
 
         starttime = increase_by_hour(starttime)
