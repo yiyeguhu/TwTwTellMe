@@ -43,8 +43,12 @@ print candidates
 
 state_map = us.states.mapping('name', 'abbr')
 
-client = MongoClient('127.0.0.1', 27018) # new port 27018
-# collection = client['test']['testData']
+# client = MongoClient('127.0.0.1', 27018) # new port 27018
+# # collection = client['test']['testData']
+# collection = client['prod']['tweet']
+
+# new Mongo cluster
+client = MongoClient('198.11.194.181', 27017)
 collection = client['prod']['tweet']
 
 def get_start_of_hour(timestamp):
