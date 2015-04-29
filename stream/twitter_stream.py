@@ -112,12 +112,16 @@ def online_process(ob):
                 if 'user' in ob:
                     if 'screen_name' in ob['user']:
                         tw.user_name = ob['user']['screen_name']
-                    # if 'location' in ob['user']:
-                    #     state_name, country_name = parse_location(ob['user']['location'])
-                    #     if state_name != OtherState:
-                    #         tw.state = state_name
-                    #     if country_name != OtherCountry:
-                    #         tw.country = country_name
+
+                    try:
+                        if 'location' in ob['user']:
+                            state_name, country_name = parse_location(ob['user']['location'])
+                            if state_name != OtherState:
+                                tw.state = state_name
+                            if country_name != OtherCountry:
+                                tw.country = country_name
+                    except:
+                        print "Some exception"
 
                 detected_themes = return_themes(text)
                 for theme in detected_themes:

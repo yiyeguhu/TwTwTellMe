@@ -51,6 +51,9 @@ if __name__ == '__main__':
 
         returns = collection0.find({'timestamp_ms': {'$gt': str(starttime*1000), '$lt': str(time2*1000)}}, {'_id':0})
         for item in returns:
-            online_process(item)
+            try:
+                online_process(item)
+            except:
+                pass
 
         starttime = increase_by_hour(starttime)
