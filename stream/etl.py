@@ -42,6 +42,8 @@ if __name__ == '__main__':
     endtime = int(sys.argv[2])
 
     while starttime < endtime:
+        print ''
+        print ctime()
         print starttime
         time2 = get_end_of_hour(starttime) if get_end_of_hour(starttime) < endtime else endtime
 
