@@ -42,56 +42,7 @@ class StdOutListener(StreamListener):
     def on_data(self, data):
         try:
             ob = json.loads(data)
-
-            if "created_at" in ob and 'text' in ob:
-                text = ob['text']
-
-                if detect(text) == 'en':
-
-                    candidates = find_candidates(text)
-
-                    # pprint(text)
-
-                    if candidates:
-                        tw = Tweet()
-
-                        # required fields
-                        tw.text = text
-                        tw.timestamp = int(time())
-
-                        tw.sentiment = return_sentiment(text)
-                        tw.sentiment_int = convert_sentiment(tw.sentiment)
-
-                        # optional
-                        if 'user' in ob:
-                            if 'screen_name' in ob['user']:
-                                tw.user_name = ob['user']['screen_name']
-                            if 'location' in ob['user']:
-                                state_name, country_name = parse_location(ob['user']['location'])
-                                if state_name != OtherState:
-                                    tw.state = state_name
-                                if country_name != OtherCountry:
-                                    tw.country = country_name
-
-                        detected_themes = return_themes(text)
-                        for theme in detected_themes:
-                            tw.themes.append(theme)
-
-                        if 'entities' in ob and 'hashtags' in ob['entities']:
-                            tags = ob['entities']['hashtags']
-                            for tag in tags:
-                                if 'text' in tag:
-                                    tw.hashtags.append(tag['text'])
-
-                        for cand in candidates:
-                            tw.candidate = cand
-
-                            json_obj = pb2json(tw)
-                            collection1.insert(json_obj, continue_on_error=True)
-                            collection2.insert(json_obj, continue_on_error=True)
-                            # collection2.insert(json_obj, continue_on_error=True)
-                            # pprint(tw.SerializeToString())
-                            # pprint(json_obj)
+            _online_process(ob)
         except:
             pass
 
@@ -131,6 +82,54 @@ def _get_candidate_names():
     print(candidate_names)
 
     return candidate_names
+
+def _online_process(ob):
+    if "created_at" in ob and 'text' in ob:
+        text = ob['text']
+
+        if detect(text) == 'en':
+
+            candidates = find_candidates(text)
+
+            # pprint(text)
+
+            if candidates:
+                tw = Tweet()
+
+                # required fields
+                tw.text = text
+                tw.timestamp = int(time())
+
+                tw.sentiment = return_sentiment(text)
+                tw.sentiment_int = convert_sentiment(tw.sentiment)
+
+                # optional
+                if 'user' in ob:
+                    if 'screen_name' in ob['user']:
+                        tw.user_name = ob['user']['screen_name']
+                    if 'location' in ob['user']:
+                        state_name, country_name = parse_location(ob['user']['location'])
+                        if state_name != OtherState:
+                            tw.state = state_name
+                        if country_name != OtherCountry:
+                            tw.country = country_name
+
+                detected_themes = return_themes(text)
+                for theme in detected_themes:
+                    tw.themes.append(theme)
+
+                if 'entities' in ob and 'hashtags' in ob['entities']:
+                    tags = ob['entities']['hashtags']
+                    for tag in tags:
+                        if 'text' in tag:
+                            tw.hashtags.append(tag['text'])
+
+                for cand in candidates:
+                    tw.candidate = cand
+
+                    json_obj = pb2json(tw)
+                    collection1.insert(json_obj, continue_on_error=True)
+                    collection2.insert(json_obj, continue_on_error=True)
 
 # def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
 def setup_streaming(tracks):
