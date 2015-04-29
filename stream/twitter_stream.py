@@ -47,11 +47,7 @@ class StdOutListener(StreamListener):
     def on_data(self, data):
         try:
             ob = json.loads(data)
-            inserts = online_process(ob)
-
-            for insert in inserts:
-                collection1.insert(insert, continue_on_error=True)
-                collection2.insert(insert, continue_on_error=True)
+            online_process(ob)
         except:
             pass
 
@@ -93,8 +89,6 @@ def _get_candidate_names():
     return candidate_names
 
 def online_process(ob):
-    result = []
-
     if "created_at" in ob and 'text' in ob:
         text = ob['text']
 
@@ -137,10 +131,10 @@ def online_process(ob):
 
                 for cand in candidates:
                     tw.candidate = cand
-                    result.append(pb2json(tw))
+                    json_ob = pb2json(tw)
 
-    return result
-
+                    collection1.insert(json_ob, continue_on_error=True)
+                    collection2.insert(json_ob, continue_on_error=True)
 
 # def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
 def setup_streaming(tracks):
