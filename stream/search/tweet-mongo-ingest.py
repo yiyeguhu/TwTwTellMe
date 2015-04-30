@@ -16,7 +16,7 @@ def list_tweet_files(file_pattern="tweet_*_*.json"):
 def modify_tweets(line):
     tweet = json.loads(line)
     dt = parser.parse(tweet['created_at'])
-    tweet['timestamp_ms'] = calendar.timegm(dt.timetuple())
+    tweet['timestamp'] = calendar.timegm(dt.timetuple())
     return tweet
 
 def tweets(tweet_files=list_tweet_files()):
@@ -38,9 +38,8 @@ def ingest(ingest_tweets=tweets(), host="198.11.194.181", port=27017, db="newdb"
     try:
         collection = client[db][collection]
         try:
-            print list(ingest_tweets)[0]
-            # collection.insert(ingest_tweets, continue_on_error=True)
-        except: # pymongo.errors.DuplicateKeyError:
+            collection.insert(ingest_tweets, continue_on_error=True)
+        except pymongo.errors.DuplicateKeyError:
             pass
     finally:
         client.close()
