@@ -17,6 +17,7 @@ def modify_tweets(line):
     tweet = json.loads(line)
     dt = parser.parse(tweet['created_at'])
     tweet['timestamp_ms'] = calendar.timegm(dt.timetuple())
+    return tweet
 
 def tweets(tweet_files=list_tweet_files()):
     for tweet_file in tweet_files:
