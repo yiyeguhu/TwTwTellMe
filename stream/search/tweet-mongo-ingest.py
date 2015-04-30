@@ -39,8 +39,8 @@ def ingest(ingest_tweets=tweets(), host="198.11.194.181", port=27017, db="newdb"
         try:
             print ingest_tweets
             # collection.insert(ingest_tweets, continue_on_error=True)
-        except pymongo.errors.DuplicateKeyError:
-            pass
+        # except pymongo.errors.DuplicateKeyError:
+        #     pass
     finally:
         client.close()
 
