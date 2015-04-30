@@ -131,7 +131,9 @@ def online_process(tweet):
         candidates = return_candidates(extxt)
         for cand in candidates:
             processed['candidate'] = cand
+            print ""
             print processed
+            print collection4
             collection4.insert(processed, continue_on_error=True)
 
 # def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
