@@ -8,6 +8,7 @@ import redis
 import numpy as np
 from api_auth import load_credentials
 import json
+from copy import deepcopy
 from ast import literal_eval
 
 app = Flask(__name__)
@@ -21,34 +22,6 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     return response
-
-
-class Viz(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument('timestamp', type=str, required=True)
-    parser.add_argument('timestamp_end', type=str, required=False)
-
-    def put(self):
-        args = self.parser.parse_args(strict=True)
-        timeseries = fake_generator.fake_generator(args['timestamp'], args['timestamp_end'], 60)["timeseries"]
-        candidate_list = ["Ted Cruz", "Jeb Bush", "Scott Walker", "Chris Christie", "Mike Huckabee", "Marco Rubio",
-                          "Rand Paul", "Rick Santorum", "Rick Perry", "Bobby Jindal"]
-
-        response = [
-            {"key": "Strong Positive", "values": []},
-            {"key": "Weak Positive", "values": []},
-            {"key": "Neutral", "values": []},
-            {"key": "Weak Negative", "values": []},
-            {"key": "Strong Negative", "values": []}
-        ]
-
-        for k, v in sorted(timeseries.iteritems()):
-            candidate = candidate_list[0]
-            for sent_dict in response:
-                dt = datetime.datetime.strptime(k, '%Y-%m-%d %H:%M:%S')
-                dt = time.mktime(dt.timetuple())
-                sent_dict['values'].append([dt, v['candidate_data'][candidate]['All States'][sent_dict['key']]])
-        return response
 
 
 class Tweets(Resource):
@@ -69,6 +42,7 @@ class Tweets(Resource):
              "sentiment_score": 6}
         ]
 
+
 class RedisInfo(Resource):
     r_server = redis.Redis(host=load_credentials('redis')['host'], password=load_credentials('redis')['password'])
     keys_we_have = r_server.keys()
@@ -78,127 +52,58 @@ class RedisInfo(Resource):
     def get(self):
         return [self.min_ts, self.max_ts]
 
-class RedisProd(Resource):
+
+
+class ChartData(Resource):
     r_server = redis.Redis(host=load_credentials('redis')['host'], password=load_credentials('redis')['password'])
 
     def get(self, start_ts, end_ts):
         sec_incr = 3600
         real_start = start_ts-start_ts % sec_incr
-        keys_to_get = list(np.arange(real_start, end_ts+1, sec_incr))
+        keys_to_get = np.arange(real_start, end_ts+1, sec_incr)
+        category_keys = np.char.mod('%d', keys_to_get)
+        keys_to_get = list(keys_to_get)
         #print keys_to_get
         data = self.r_server.mget(keys_to_get)
-        data = literal_eval(data[0])
-        print data
 
-        return data
+        chart_template = {
+            'series':[
+                {'name': 'Strongly Negative',
+                 'data': []},
+                {'name': 'Moderately Negative',
+                 'data': []},
+                {'name': 'Neutral',
+                 'data': []},
+                {'name': 'Moderately Positive',
+                 'data': []},
+                {'name': 'Strongly Positive',
+                 'data': []}
+            ],
+            'categories': list(category_keys),
+            'title': {'text': ''}}
 
-        #data = self.r_server.get(posixtime)
-        #return {'success': data}
+        data_dict = {}
+        charts = []
+        for i, d in enumerate(data):
+            time_data = json.loads(d)
+            data_dict[str(i)] = time_data
+            candidate_data = time_data['candidate_data']
+            for j, candidate in enumerate(candidate_data.keys()):
+                scores = candidate_data[candidate]['sentiment_scores']['All States']
+                if i == 0:
+                    charts.append(deepcopy(chart_template))
+                    charts[j]['title']['text'] = candidate
+                for k, series in enumerate(charts[j]['series']):
+                    series['data'].append(scores[str(k+1)])
 
-class RedisTest(Resource):
-    r_server = redis.Redis(host='198.23.67.172', password='dupont')
-    def put(self, posixtime):
-        my_blob = {
-                "candidate_data": {
-                  "Ted Cruz": {
-                    "tweets": [
-                      {
-                        "user_name": "User Name",
-                        "user_state": "State",
-                        "tweet_text": "Tweet text here",
-                        "sentiment_score": 6
-                      },
-                      {
-                        "user_name": "User Name",
-                        "user_state": "State",
-                        "tweet_text": "Tweet text here",
-                        "sentiment_score": 6
-                      }
-                    ],
-                    "sentiment_scores": {
-                      "All States": {
-                        "1": 5,
-                        "2": 4,
-                        "3": 4,
-                        "4": 2,
-                        "5": 3
-                      },
-                      "States": {
-                        "NY": {
-                          "1": 5,
-                          "2": 4,
-                          "3": 4,
-                          "4": 2,
-                          "5": 3
-                        },
-                        "CA": {
-                          "1": 5,
-                          "2": 4,
-                          "3": 4,
-                          "4": 2,
-                          "5": 3
-                        }
-                      }
-                    }
-                  },
-                  "Jeb Bush": {
-                    "tweets": [
-                      {
-                        "user_name": "User Name",
-                        "user_state": "State",
-                        "tweet_text": "Tweet text here",
-                        "sentiment_score": 6
-                      },
-                      {
-                        "user_name": "User Name",
-                        "user_state": "State",
-                        "tweet_text": "Tweet text here",
-                        "sentiment_score": 6
-                      }
-                    ],
-                    "sentiment_scores": {
-                      "All States": {
-                        "1": 5,
-                        "2": 4,
-                        "3": 4,
-                        "4": 2,
-                        "5": 3
-                      },
-                      "States": {
-                        "NY": {
-                          "1": 5,
-                          "2": 4,
-                          "3": 4,
-                          "4": 2,
-                          "5": 3,
-                          "6": 3
-                        },
-                        "CA": {
-                          "1": 5,
-                          "2": 4,
-                          "3": 4,
-                          "4": 2,
-                          "5": 3
-                        }
-                      }
-                    }
-                  }
-                }
-              }
+        return {'response': charts}
 
-        self.r_server.set(posixtime, my_blob)
-        return {'success': 'success'}
 
-    def get(self, posixtime):
-        data = self.r_server.get(posixtime)
-        return {'success': data}
 
 # API ROUTING
-api.add_resource(Viz, '/viz')
 api.add_resource(Tweets, '/tweets')
-api.add_resource(RedisTest, '/redis-test/<float:posixtime>')
 api.add_resource(RedisInfo, '/redis-info/')
-api.add_resource(RedisProd, '/redis-prod/<int:start_ts>&<int:end_ts>')
+api.add_resource(ChartData, '/chart-data/<int:start_ts>&<int:end_ts>')
 
 if __name__ == "__main__":
     runner.run()
