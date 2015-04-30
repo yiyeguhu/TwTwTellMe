@@ -75,7 +75,6 @@ if __name__ == '__main__':
                 try:
                     dest_collection.insert(inserted, continue_on_error=True)
                 except pymongo.errors.DuplicateKeyError:
-                    print cands
                     print 'duplicate key - skipping'
 
             counter += 1
