@@ -104,8 +104,8 @@ def _get_candidate_names():
     return candidate_names
 
 def online_process(tweet):
-    if "created_at" in tweet and 'text' in tweet:
-        print
+    if "created_at" in tweet and 'text' in tweet and detect(tweet['text']) == 'en':
+
         ht = [hashtag['text'] for hashtag in tweet['entities']['hashtags']]
         um = [user_mention['screen_name']+', '+user_mention['name'] for user_mention in tweet['entities']['user_mentions']]
 
@@ -132,10 +132,6 @@ def online_process(tweet):
         candidates = return_candidates(extxt)
         for cand in candidates:
             processed['candidate'] = cand
-            print ""
-            print ctime()
-            print processed
-            print collection4
             collection4.insert(processed, continue_on_error=True)
 
 # def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
