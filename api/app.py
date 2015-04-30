@@ -70,7 +70,6 @@ class ChartData(Resource):
         # data = PIPE.mget(keys_to_get)
         for key in keys_to_get:
             PIPE.get(key)
-            print key
 
         data_dict = {}
         charts = []
