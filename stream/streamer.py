@@ -105,6 +105,7 @@ def _get_candidate_names():
 
 def online_process(tweet):
     if "created_at" in tweet and 'text' in tweet:
+        print
         ht = [hashtag['text'] for hashtag in tweet['entities']['hashtags']]
         um = [user_mention['screen_name']+', '+user_mention['name'] for user_mention in tweet['entities']['user_mentions']]
 
@@ -132,6 +133,7 @@ def online_process(tweet):
         for cand in candidates:
             processed['candidate'] = cand
             print ""
+            print ctime()
             print processed
             print collection4
             collection4.insert(processed, continue_on_error=True)
