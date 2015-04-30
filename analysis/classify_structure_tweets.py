@@ -80,6 +80,8 @@ if __name__ == '__main__':
 
             counter += 1
             if not counter % 100:
+                print ""
+                print calendar.timegm(dt.timetuple())
                 print counter
 
             tweet['processed'] = True
