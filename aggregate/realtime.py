@@ -22,6 +22,11 @@ if __name__ == '__main__':
         currenttime = int(time.time())
         starttime = get_start_of_hour(currenttime)
 
+        print currenttime
+        print unixtime_to_datetime(currenttime)
+        print unixtime_to_datetime(starttime)
+        print ""
+
         hour_data = aggregate(starttime, currenttime)
         r.set('test_'+str(starttime), json.dumps(hour_data))
 
