@@ -41,6 +41,10 @@ def convert_sent(f):
         f = 5
     return int(f)
 
+filename = os.path.dirname(os.path.realpath(__file__)) + "/../resources/candidates.json"
+with open(filename) as f:
+    candidates = json.load(f)
+
 client0 = MongoClient('127.0.0.1')
 client0.the_database.authenticate('admin', 'QS6TnHlb', source='admin')
 collection0 = client0['newdb']['tweets']
@@ -129,10 +133,11 @@ def online_process(tweet):
                 'timestamp': int(time())
         }
 
-        candidates = return_candidates(extxt)
-        for cand in candidates:
-            processed['candidate'] = cand
-            collection4.insert(processed, continue_on_error=True)
+        cands = return_candidates(extxt)
+        for cand in cands:
+            if cand in candidates:
+                processed['candidate'] = cand
+                collection4.insert(processed, continue_on_error=True)
 
 # def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
 def setup_streaming(tracks):
