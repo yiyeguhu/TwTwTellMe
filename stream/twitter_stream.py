@@ -26,6 +26,7 @@ from algo.geoparser import parse_location, OtherCountry, OtherState
 from algo.dataminer import find_candidates, OtherCandidate
 from algo.tweet_check import return_candidates, return_sentiment, return_themes, convert_sentiment
 from utils import load_credentials, tweepy_auth
+from analysis.classify_structure_tweets import convert_sent
 
 client0 = MongoClient('127.0.0.1')
 client0.the_database.authenticate('admin', 'QS6TnHlb', source='admin')
@@ -39,6 +40,9 @@ client2 = MongoClient('198.11.194.181')
 collection2 = client2['prod']['tweet']
 collection3 = client2['newdb']['tweets']
 
+filename = os.path.dirname(os.path.realpath(__file__)) + "/../resources/candidates.json"
+with open(filename) as f:
+    candidates = json.load(f)
 
 class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
@@ -95,25 +99,30 @@ def online_process(ob):
 
         if detect(text) == 'en':
 
-            candidates = find_candidates(text)
+            ht = [hashtag['text'] for hashtag in ob['entities']['hashtags']]
+            um = [user_mention['screen_name']+', '+user_mention['name'] for user_mention in ob['entities']['user_mentions']]
 
-            # pprint(text)
+            extxt = text + ', ' + ', '.join(ht)
+            extxt = extxt + ', ' + ', '.join(um)
 
-            if candidates:
+            cands = [cand for cand in return_candidates(extxt) if cand in candidates]
+
+            if cands:
                 tw = Tweet()
 
                 # required fields
                 tw.text = text
                 # tw.timestamp = int(time())
-                tw.timestamp = int(ob['timestamp_ms'])/1000
+                tw.timestamp = int(time())
 
-                tw.sentiment = return_sentiment(text)
-                tw.sentiment_int = convert_sentiment(tw.sentiment)
+                tw.sentiment = return_sentiment(extxt)
+                tw.sentiment_int = convert_sent(tw.sentiment)
+                # tw.sentiment_int = convert_sentiment(tw.sentiment)
 
                 # optional
                 if 'user' in ob:
-                    if 'screen_name' in ob['user']:
-                        tw.user_name = ob['user']['screen_name']
+                    if 'name' in ob['user']:
+                        tw.user_name = ob['user']['name']
 
                     # try:
                     #     if 'location' in ob['user']:
@@ -125,7 +134,7 @@ def online_process(ob):
                     # except:
                     #     print "Geocoder exception"
 
-                detected_themes = return_themes(text)
+                detected_themes = return_themes(extxt)
                 for theme in detected_themes:
                     tw.themes.append(theme)
 
@@ -135,7 +144,7 @@ def online_process(ob):
                         if 'text' in tag:
                             tw.hashtags.append(tag['text'])
 
-                for cand in candidates:
+                for cand in cands:
                     tw.candidate = cand
                     json_ob = pb2json(tw)
 
