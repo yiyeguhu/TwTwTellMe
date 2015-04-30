@@ -37,7 +37,8 @@ if __name__ == '__main__':
 
     counter = 0
     # for tweet in src_collection.find():
-    for tweet in src_collection.find({'timestamp': {'$gte': 1430247600, '$lt': 1430301600}}):
+    # for tweet in src_collection.find({'timestamp': {'$gte': 1430247600, '$lt': 1430301600}}):
+    for tweet in src_collection.find({'timestamp': {'$gte': 1430410447}}):
         try:
             dt = parser.parse(tweet['created_at'])
 
@@ -84,8 +85,8 @@ if __name__ == '__main__':
                 print calendar.timegm(dt.timetuple())
                 print counter
 
-            tweet['processed'] = True
-            src_collection.update({'_id': tweet['_id']}, {"$set": tweet}, upsert=False)
+            # tweet['processed'] = True
+            # src_collection.update({'_id': tweet['_id']}, {"$set": tweet}, upsert=False)
         except:
             print "error in post-processing"
 
