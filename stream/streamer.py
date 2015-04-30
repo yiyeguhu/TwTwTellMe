@@ -17,7 +17,9 @@ from pprint import pprint
 
 from langdetect import detect
 
-from math import ceil
+from math import ceil, floor
+
+import calendar
 
 # from own packages
 from schema.python.tweet_pb2 import Tweet
@@ -26,7 +28,22 @@ from algo.geoparser import parse_location, OtherCountry, OtherState
 from algo.dataminer import find_candidates, OtherCandidate
 from algo.tweet_check import return_candidates, return_sentiment, return_themes, convert_sentiment
 from utils import load_credentials, tweepy_auth
-from analysis.classify_structure_tweets import convert_sent
+
+def convert_sent(f):
+    f = 2*f + 3
+    if f < 3:
+        f = floor(f)
+    elif f > 3:
+        f = ceil(f)
+    if f < 1:
+        f = 1
+    elif f > 5:
+        f = 5
+    return int(f)
+
+filename = os.path.dirname(os.path.realpath(__file__)) + "/../resources/candidates.json"
+with open(filename) as f:
+    candidates = json.load(f)
 
 client0 = MongoClient('127.0.0.1')
 client0.the_database.authenticate('admin', 'QS6TnHlb', source='admin')
@@ -39,10 +56,7 @@ collection1 = client1['prod']['tweet']
 client2 = MongoClient('198.11.194.181')
 collection2 = client2['prod']['tweet']
 collection3 = client2['newdb']['tweets']
-
-filename = os.path.dirname(os.path.realpath(__file__)) + "/../resources/candidates.json"
-with open(filename) as f:
-    candidates = json.load(f)
+collection4 = client2['prod']['processed']
 
 class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
@@ -93,63 +107,37 @@ def _get_candidate_names():
 
     return candidate_names
 
-def online_process(ob):
-    if "created_at" in ob and 'text' in ob:
-        text = ob['text']
+def online_process(tweet):
+    if "created_at" in tweet and 'text' in tweet and detect(tweet['text']) == 'en':
 
-        if detect(text) == 'en':
+        ht = [hashtag['text'] for hashtag in tweet['entities']['hashtags']]
+        um = [user_mention['screen_name']+', '+user_mention['name'] for user_mention in tweet['entities']['user_mentions']]
 
-            ht = [hashtag['text'] for hashtag in ob['entities']['hashtags']]
-            um = [user_mention['screen_name']+', '+user_mention['name'] for user_mention in ob['entities']['user_mentions']]
+        txt = tweet['text']
+        extxt = txt + ', ' + ', '.join(ht)
+        extxt = extxt + ', ' + ', '.join(um)
 
-            extxt = text + ', ' + ', '.join(ht)
-            extxt = extxt + ', ' + ', '.join(um)
+        sent = return_sentiment(extxt)
 
-            cands = [cand for cand in return_candidates(extxt) if cand in candidates]
+        processed = {
+                'text': txt,
+                'hashtags':ht,
+                'id': tweet['id'],
+                'user_id': tweet['user']['id'],
+                'user_name': tweet['user']['name'],
+                'screen_name': tweet['user']['screen_name'],
+                'raw_location': tweet['user'].get('location', 'not specified'),
+                'sentiment': sent,
+                'sentiment_int': convert_sent(sent),
+                'themes': return_themes(extxt),
+                'timestamp': int(time())
+        }
 
-            if cands:
-                tw = Tweet()
-
-                # required fields
-                tw.text = text
-                # tw.timestamp = int(time())
-                tw.timestamp = int(time())
-
-                tw.sentiment = return_sentiment(extxt)
-                tw.sentiment_int = convert_sent(tw.sentiment)
-                # tw.sentiment_int = convert_sentiment(tw.sentiment)
-
-                # optional
-                if 'user' in ob:
-                    if 'name' in ob['user']:
-                        tw.user_name = ob['user']['name']
-
-                    # try:
-                    #     if 'location' in ob['user']:
-                    #         state_name, country_name = parse_location(ob['user']['location'])
-                    #         if state_name != OtherState:
-                    #             tw.state = state_name
-                    #         if country_name != OtherCountry:
-                    #             tw.country = country_name
-                    # except:
-                    #     print "Geocoder exception"
-
-                detected_themes = return_themes(extxt)
-                for theme in detected_themes:
-                    tw.themes.append(theme)
-
-                if 'entities' in ob and 'hashtags' in ob['entities']:
-                    tags = ob['entities']['hashtags']
-                    for tag in tags:
-                        if 'text' in tag:
-                            tw.hashtags.append(tag['text'])
-
-                for cand in cands:
-                    tw.candidate = cand
-                    json_ob = pb2json(tw)
-
-                    collection1.insert(json_ob, continue_on_error=True)
-                    # collection2.insert(json_ob, continue_on_error=True)
+        cands = return_candidates(extxt)
+        for cand in cands:
+            if cand in candidates:
+                processed['candidate'] = cand
+                collection4.insert(processed, continue_on_error=True)
 
 # def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
 def setup_streaming(tracks):

@@ -48,8 +48,8 @@ state_map = us.states.mapping('name', 'abbr')
 # collection = client['prod']['tweet']
 
 # new Mongo cluster
-client = MongoClient('198.11.194.181', 27017)
-collection = client['prod']['tweet']
+client = MongoClient('198.11.194.181')
+collection = client['prod']['processed']
 
 def get_start_of_hour(timestamp):
     #return timestamp/3600*3600
@@ -75,14 +75,12 @@ def aggregate_tweets_for_candidate(cand, starttime, endtime):
         # f = {'candidate' : cand, 'timestamp' : { '$gt': starttime, '$lt': endtime }}
         # pr = {'user_name':1, 'state':1, 'text':1, 'themes':1, 'hashtags':1, 'sentiment_int':1, '_id':0}
 
-        ret = collection.find({'candidate' : cand, 'timestamp' : { '$gt': starttime, '$lt': endtime }}, {'user_name':1, 'state':1, 'text':1, 'themes':1, 'hashtags':1, 'sentiment_int':1, '_id':0}, limit=10)
+        ret = collection.find({'candidate' : cand, 'timestamp' : { '$gt': starttime, '$lt': endtime }}, {'user_name':1, 'text':1, 'themes':1, 'hashtags':1, 'sentiment_int':1, '_id':0}, limit=10)
 
         for doc in ret:
             item = {}
             if 'user_name' in doc:
                 item['user_name'] = doc['user_name']
-            if 'state' in doc:
-                item['user_state'] = doc['state']
             if 'text' in doc:
                 item['tweet_text'] = doc['text']
             if 'themes' in doc:
