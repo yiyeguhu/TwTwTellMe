@@ -200,6 +200,8 @@ def get_aggregate_for_candidate(cand, starttime, endtime):
 def aggregate(starttime, endtime):
     result = {'candidate_data':{}}
 
+    print candidates
+
     try:
         for cand in candidates:
             result['candidate_data'][cand.encode('ascii','ignore')] = get_aggregate_for_candidate(cand, starttime, endtime)
