@@ -16,6 +16,7 @@ runner = Runner(app)
 api = Api(app)
 
 R_SERVER = redis.Redis(host=load_credentials('redis')['host'], password=load_credentials('redis')['password'])
+PIPE = R_SERVER.pipeline()
 
 # Enable CORS
 @app.after_request
@@ -66,11 +67,15 @@ class ChartData(Resource):
         category_keys = np.char.mod('%d', keys_to_get)
         keys_to_get = list(keys_to_get)
         #print keys_to_get
-        data = R_SERVER.mget(keys_to_get)
+        # data = PIPE.mget(keys_to_get)
+        for key in keys_to_get:
+            PIPE.get(key)
+            print key
 
         data_dict = {}
         charts = []
-        for i, d in enumerate(data):
+
+        for i, d in enumerate(PIPE.execute()):
             time_data = json.loads(d)
             data_dict[str(i)] = time_data
             candidate_data = time_data['candidate_data']
