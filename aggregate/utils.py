@@ -48,7 +48,7 @@ state_map = us.states.mapping('name', 'abbr')
 # collection = client['prod']['tweet']
 
 # new Mongo cluster
-client = MongoClient('198.11.194.181', 27017)
+client = MongoClient('198.11.194.181')
 collection = client['prod']['tweet']
 
 def get_start_of_hour(timestamp):
