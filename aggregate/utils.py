@@ -198,6 +198,7 @@ def get_aggregate_for_candidate(cand, starttime, endtime):
     return cand_info
 
 def aggregate(starttime, endtime):
+    print "hello"
     result = {'candidate_data':{}}
 
     print candidates
