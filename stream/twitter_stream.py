@@ -166,7 +166,8 @@ def setup_streaming(tracks):
     # stream.filter(track=tracks, languages=['en'])
     # stream.filter(languages=['en'])
 
-    with open('search/candidates2.json') as f:
+    filename1 = os.path.dirname(os.path.realpath(__file__)) + "/../stream/search/candidates.json"
+    with open(filename1) as f:
         candidate_dict = json.load(f)
 
     track_terms = []
