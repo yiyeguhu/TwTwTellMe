@@ -165,7 +165,19 @@ def setup_streaming(tracks):
     stream = Stream(auth, l)
     # stream.filter(track=tracks, languages=['en'])
     # stream.filter(languages=['en'])
+
+    # filename1 = os.path.dirname(os.path.realpath(__file__)) + "/../stream/search/candidates.json"
+    # with open(filename1) as f:
+    #     candidate_dict = json.load(f)
+    #
+    # track_terms = []
+    # for candidate in candidate_dict.keys():
+    #     for term in candidate_dict[candidate]:
+    #         track_terms.append(term)
+    # print track_terms
+
     stream.filter(track=tracks)
+    # stream.filter(track=track_terms)
     # stream.sample()
 
 if __name__ == '__main__':
