@@ -25,9 +25,11 @@ class CustomStreamListener(StreamListener):
         try:
             if tweet.get('timestamp_ms', None):
                 tweet['timestamp'] = tweet['timestamp_ms']/1000
+                print 'timestamp worked'
             elif tweet.get('created_at', None):
                 dt = parser.parse(tweet['created_at'])
                 tweet['timestamp'] = calendar.timegm(dt.timetuple())
+                print 'backup timestamp worked'
             self.collection.insert(json.loads(tweet), continue_on_error=True)
             self.counter +=1
             self.log(self.counter)
