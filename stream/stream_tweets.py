@@ -22,6 +22,7 @@ class CustomStreamListener(StreamListener):
         self.counter = 0
 
     def on_data(self, tweet):
+        print tweet.get('timestamp_ms', None)
         try:
             if tweet.get('timestamp_ms', None):
                 tweet['timestamp'] = tweet.get('timestamp_ms', None)/1000
@@ -33,7 +34,7 @@ class CustomStreamListener(StreamListener):
             self.collection.insert(json.loads(tweet), continue_on_error=True)
             self.counter +=1
             self.log(self.counter)
-        except:
+        except pymongo.errors.DuplicateKeyError:
             self.log("database error, but streaming is continuing")
 
     def on_error(self, status_code):
