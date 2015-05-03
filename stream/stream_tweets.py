@@ -6,9 +6,8 @@ from utils import load_credentials, tweepy_auth, tweepy_api
 from tweepy import streaming, StreamListener
 import json
 import argparse
-from os import environ
-
-# pwd = environ['MONGOPWD']
+from dateutil import parser
+import calendar
 
 
 class CustomStreamListener(StreamListener):
@@ -18,13 +17,17 @@ class CustomStreamListener(StreamListener):
         self.verbose = verbose
         super(StreamListener, self).__init__()
         self.client = pymongo.MongoClient(host="198.11.194.181", port=27017)
-        # self.client.newdb.authenticate('TwTw', pwd)
         self.collection = self.client.newdb.tweets
         self.create_index()
         self.counter = 0
 
     def on_data(self, tweet):
         try:
+            if tweet.get('timestamp_ms', None):
+                tweet['timestamp'] = tweet['timestamp_ms']/1000
+            elif tweet.get('created_at', None):
+                dt = parser.parse(tweet['created_at'])
+                tweet['timestamp'] = calendar.timegm(dt.timetuple())
             self.collection.insert(json.loads(tweet), continue_on_error=True)
             self.counter +=1
             self.log(self.counter)
