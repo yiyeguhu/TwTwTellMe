@@ -22,8 +22,8 @@ class CustomStreamListener(StreamListener):
         self.counter = 0
 
     def on_data(self, tweet):
-        print tweet.get('timestamp_ms', None)
         try:
+            tweet = json.loads(tweet)
             if tweet.get('timestamp_ms', None):
                 tweet['timestamp'] = tweet.get('timestamp_ms', None)/1000
                 print 'timestamp worked'
@@ -31,7 +31,7 @@ class CustomStreamListener(StreamListener):
                 dt = parser.parse(tweet.get('created_at', None))
                 tweet['timestamp'] = calendar.timegm(dt.timetuple())
                 print 'backup timestamp worked'
-            self.collection.insert(json.loads(tweet), continue_on_error=True)
+            self.collection.insert(tweet, continue_on_error=True)
             self.counter +=1
             self.log(self.counter)
         except pymongo.errors.DuplicateKeyError:
