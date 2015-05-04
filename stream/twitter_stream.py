@@ -152,7 +152,7 @@ def online_process(ob):
                 for cand in cands:
                     tw.candidate = cand
                     json_ob = pb2json(tw)
-                    print json_ob
+                    # print json_ob
                     test_tweet.insert(json_ob, continue_on_error=True)
                     # collection2.insert(json_ob, continue_on_error=True)
 
@@ -163,7 +163,7 @@ def setup_streaming(tracks):
     # auth.set_access_token(access_token, access_token_secret)
 
     # print os.path.dirname(os.path.realpath(__file__)) + "/../stream/candidates.json"
-    credentials = load_credentials(True, os.path.dirname(os.path.realpath(__file__)) + "/credentials.json")
+    credentials = load_credentials(True, os.path.dirname(os.path.realpath(__file__)) + "/credentials0.json")
     auth = tweepy_auth(credentials, user=True)
 
     l = StdOutListener()
