@@ -25,7 +25,7 @@ if __name__ == '__main__':
         starttime = get_start_of_hour(currenttime)
 
         hour_data = aggregate(prod_tweet, starttime, currenttime)
-        r.set('test_'+str(starttime), json.dumps(hour_data))
+        r.set(str(starttime), json.dumps(hour_data))
 
         print currenttime
         print unixtime_to_datetime(currenttime)
