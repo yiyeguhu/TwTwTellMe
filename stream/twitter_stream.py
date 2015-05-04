@@ -153,6 +153,9 @@ def online_process(ob):
                 for theme in detected_themes:
                     tw.themes.append(theme)
 
+                print pb2json(tw)
+                print "hello3"
+
                 tw.hashtags = ht
                 # if 'entities' in ob and 'hashtags' in ob['entities']:
                 #     tags = ob['entities']['hashtags']
