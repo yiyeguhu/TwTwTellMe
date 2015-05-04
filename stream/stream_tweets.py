@@ -32,7 +32,7 @@ class CustomStreamListener(StreamListener):
             self.collection.insert(tweet, continue_on_error=True)
             self.counter +=1
             self.log(self.counter)
-        except pymongo.errors.DuplicateKeyError:
+        except:
             self.log("database error, but streaming is continuing")
 
     def on_error(self, status_code):
