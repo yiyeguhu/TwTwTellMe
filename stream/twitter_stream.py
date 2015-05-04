@@ -28,17 +28,19 @@ from algo.tweet_check import return_candidates, return_sentiment, return_themes,
 from utils import load_credentials, tweepy_auth
 from analysis.classify_structure_tweets import convert_sent
 
-client0 = MongoClient('127.0.0.1')
-client0.the_database.authenticate('admin', 'QS6TnHlb', source='admin')
-collection0 = client0['newdb']['tweets']
+from mongocollection import *
 
-client1 = MongoClient('127.0.0.1', 27018) # new port 27018
-# collection = client['test']['testData']
-collection1 = client1['prod']['tweet']
+# client0 = MongoClient('127.0.0.1')
+# client0.the_database.authenticate('admin', 'QS6TnHlb', source='admin')
+# collection0 = client0['newdb']['tweets']
 
-client2 = MongoClient('198.11.194.181')
-collection2 = client2['prod']['tweet']
-collection3 = client2['newdb']['tweets']
+# client1 = MongoClient('127.0.0.1', 27018) # new port 27018
+# # collection = client['test']['testData']
+# collection1 = client1['prod']['tweet']
+#
+# client2 = MongoClient('198.11.194.181')
+# collection2 = client2['prod']['tweet']
+# collection3 = client2['newdb']['tweets']
 
 filename = os.path.dirname(os.path.realpath(__file__)) + "/../resources/candidates.json"
 with open(filename) as f:
@@ -98,8 +100,10 @@ def online_process(ob):
         text = ob['text']
 
         if detect(text) == 'en':
-
-            ht = [hashtag['text'] for hashtag in ob['entities']['hashtags']]
+            if 'entities' in ob and 'hashtags' in ob['entities']:
+                ht = [hashtag['text'] for hashtag in ob['entities']['hashtags']]
+            else:
+                ht = []
             um = [user_mention['screen_name']+', '+user_mention['name'] for user_mention in ob['entities']['user_mentions']]
 
             extxt = text + ', ' + ', '.join(ht)
@@ -138,17 +142,18 @@ def online_process(ob):
                 for theme in detected_themes:
                     tw.themes.append(theme)
 
-                if 'entities' in ob and 'hashtags' in ob['entities']:
-                    tags = ob['entities']['hashtags']
-                    for tag in tags:
-                        if 'text' in tag:
-                            tw.hashtags.append(tag['text'])
+                tw.hashtags = ht
+                # if 'entities' in ob and 'hashtags' in ob['entities']:
+                #     tags = ob['entities']['hashtags']
+                #     for tag in tags:
+                #         if 'text' in tag:
+                #             tw.hashtags.append(tag['text'])
 
                 for cand in cands:
                     tw.candidate = cand
                     json_ob = pb2json(tw)
 
-                    collection1.insert(json_ob, continue_on_error=True)
+                    test_tweet.insert(json_ob, continue_on_error=True)
                     # collection2.insert(json_ob, continue_on_error=True)
 
 # def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
