@@ -9,6 +9,8 @@ import redis
 
 from aggregate.utils import aggregate, get_start_of_hour, get_end_of_hour, increase_by_hour, unixtime_to_datetime
 
+from stream.mongocollection import *
+
 #r_server = redis.Redis(host='198.23.67.172', password='dupont')
 
 if __name__ == '__main__':
@@ -22,17 +24,14 @@ if __name__ == '__main__':
         currenttime = int(time.time())
         starttime = get_start_of_hour(currenttime)
 
-        print currenttime
-        print unixtime_to_datetime(currenttime)
-        print unixtime_to_datetime(starttime)
-        print ""
-
-        hour_data = aggregate(starttime, currenttime)
+        hour_data = aggregate(prod_tweet, starttime, currenttime)
         r.set('test_'+str(starttime), json.dumps(hour_data))
 
         print currenttime
         print unixtime_to_datetime(currenttime)
         print unixtime_to_datetime(starttime)
+        print starttime
+        print hour_data
         print ""
 
         time.sleep(5)
