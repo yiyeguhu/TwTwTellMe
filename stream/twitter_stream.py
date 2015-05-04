@@ -146,6 +146,8 @@ def online_process(ob):
                     # except:
                     #     print "Geocoder exception"
 
+                print "hello2"
+
                 detected_themes = return_themes(extxt)
                 for theme in detected_themes:
                     tw.themes.append(theme)
