@@ -113,6 +113,8 @@ def online_process(ob):
             cands = [cand for cand in return_candidates(extxt) if cand in candidates]
 
             print cands
+            print ht
+            print um
             print extxt
 
             if cands:
