@@ -118,6 +118,8 @@ def online_process(ob):
             print extxt
 
             if cands:
+                print "hello1"
+
                 tw = Tweet()
 
                 # required fields
