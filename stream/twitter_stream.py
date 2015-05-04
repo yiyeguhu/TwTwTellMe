@@ -113,9 +113,9 @@ def online_process(ob):
             cands = [cand for cand in return_candidates(extxt) if cand in candidates]
 
             print cands
-            print ht
-            print um
-            print extxt
+            # print ht
+            # print um
+            # print extxt
 
             if cands:
                 print "hello1"
@@ -146,6 +146,7 @@ def online_process(ob):
                     # except:
                     #     print "Geocoder exception"
 
+                print pb2json(tw)
                 print "hello2"
 
                 detected_themes = return_themes(extxt)
