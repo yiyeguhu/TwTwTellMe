@@ -9,6 +9,8 @@ import json
 
 from aggregate.utils import aggregate, get_start_of_hour, get_end_of_hour, increase_by_hour, unixtime_to_datetime
 
+from stream.mongocollection import *
+
 #r_server = redis.Redis(host='198.23.67.172', password='dupont')
 
 if __name__ == '__main__':
@@ -29,7 +31,7 @@ if __name__ == '__main__':
     # while start_time < int(time.time()):
     while start_time < end_time:
         # unixtime_to_datetime(start_time)
-        hour_data = aggregate(start_time, get_end_of_hour(start_time))
+        hour_data = aggregate(cluster_prod_processed, start_time, get_end_of_hour(start_time))
 
         r.set(str(start_time), json.dumps(hour_data))
 
