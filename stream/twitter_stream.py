@@ -97,6 +97,7 @@ def _get_candidate_names():
 
 def online_process(ob):
     if "created_at" in ob and 'text' in ob:
+        print ""
         print ob
         text = ob['text']
         if detect(text) == 'en':
