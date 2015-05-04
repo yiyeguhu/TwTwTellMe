@@ -96,6 +96,8 @@ def _get_candidate_names():
     return candidate_names
 
 def online_process(ob):
+    print ob
+
     if "created_at" in ob and 'text' in ob:
 
         text = ob['text']
