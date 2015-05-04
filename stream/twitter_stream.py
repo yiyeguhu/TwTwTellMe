@@ -54,6 +54,7 @@ class StdOutListener(StreamListener):
     def on_data(self, data):
         try:
             ob = json.loads(data)
+            print ob
             online_process(ob)
         except:
             pass
@@ -97,6 +98,7 @@ def _get_candidate_names():
 
 def online_process(ob):
     if "created_at" in ob and 'text' in ob:
+
         text = ob['text']
 
         if detect(text) == 'en':
