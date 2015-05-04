@@ -96,14 +96,8 @@ def _get_candidate_names():
     return candidate_names
 
 def online_process(ob):
-    print ob
-
     if "created_at" in ob and 'text' in ob:
-
         text = ob['text']
-
-        print text
-
         if detect(text) == 'en':
             if 'entities' in ob and 'hashtags' in ob['entities']:
                 ht = [hashtag['text'] for hashtag in ob['entities']['hashtags']]
@@ -115,9 +109,9 @@ def online_process(ob):
             extxt = extxt + ', ' + ', '.join(um)
 
             cands = [cand for cand in return_candidates(extxt) if cand in candidates]
-
-            print cands
-            print extxt
+            #
+            # print cands
+            # print extxt
 
             if cands:
                 tw = Tweet()
@@ -179,18 +173,18 @@ def setup_streaming(tracks):
     # stream.filter(track=tracks, languages=['en'])
     # stream.filter(languages=['en'])
 
-    # filename1 = os.path.dirname(os.path.realpath(__file__)) + "/../stream/search/candidates.json"
-    # with open(filename1) as f:
-    #     candidate_dict = json.load(f)
-    #
-    # track_terms = []
-    # for candidate in candidate_dict.keys():
-    #     for term in candidate_dict[candidate]:
-    #         track_terms.append(term)
-    # print track_terms
+    filename1 = os.path.dirname(os.path.realpath(__file__)) + "/../stream/search/candidates2.json"
+    with open(filename1) as f:
+        candidate_dict = json.load(f)
 
-    stream.filter(track=tracks)
-    # stream.filter(track=track_terms)
+    track_terms = []
+    for candidate in candidate_dict.keys():
+        for term in candidate_dict[candidate]:
+            track_terms.append(term)
+    print track_terms
+
+    # stream.filter(track=tracks)
+    stream.filter(track=track_terms)
     # stream.sample()
 
 if __name__ == '__main__':
