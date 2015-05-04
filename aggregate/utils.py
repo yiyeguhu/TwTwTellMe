@@ -48,8 +48,8 @@ state_map = us.states.mapping('name', 'abbr')
 # collection = client['prod']['tweet']
 
 # new Mongo cluster
-client = MongoClient('198.11.194.181')
-collection = client['prod']['processed']
+# client = MongoClient('198.11.194.181')
+# collection = client['prod']['processed']
 
 def get_start_of_hour(timestamp):
     #return timestamp/3600*3600
@@ -67,7 +67,7 @@ def unixtime_to_datetime(unixtime):
 def datetime_to_unixtime(dt):
     return int(mktime(dt.timetuple()))
 
-def aggregate_tweets_for_candidate(cand, starttime, endtime):
+def aggregate_tweets_for_candidate(collection, cand, starttime, endtime):
 
     try:
         result = []
@@ -95,7 +95,7 @@ def aggregate_tweets_for_candidate(cand, starttime, endtime):
     except:
         return []
 
-def get_hashtag_stats_for_candidate(cand, starttime, endtime):
+def get_hashtag_stats_for_candidate(collection, cand, starttime, endtime):
 
     try:
         hashtag_stats = []
@@ -118,7 +118,7 @@ def get_hashtag_stats_for_candidate(cand, starttime, endtime):
     except:
         return hashtag_stats
 
-def get_sentiment_stats_for_candidate(cand, starttime, endtime):
+def get_sentiment_stats_for_candidate(collection, cand, starttime, endtime):
 
     try:
         result = _init_sentiment_buckets()
@@ -140,7 +140,7 @@ def get_sentiment_stats_for_candidate(cand, starttime, endtime):
 def _init_sentiment_buckets():
     return {'1':0, '2':0, '3':0, '4':0, '5':0}
 
-def get_sentiment_stats_by_state_for_candidate(cand, starttime, endtime):
+def get_sentiment_stats_by_state_for_candidate(collection, cand, starttime, endtime):
 
     try:
         state_buckets = _init_sentiment_buckets_by_state()
@@ -172,16 +172,16 @@ def _init_sentiment_buckets_by_state():
 
     return state_buckets
 
-def get_aggregate_for_candidate(cand, starttime, endtime):
+def get_aggregate_for_candidate(collection, cand, starttime, endtime):
     cand_info = {"tweets":{}, "sentiment_scores": {}}
 
     # tweets
-    tweets = aggregate_tweets_for_candidate(cand, starttime, endtime)
+    tweets = aggregate_tweets_for_candidate(collection, cand, starttime, endtime)
     cand_info['tweets'] = tweets
 
     # sentiment:
      # (1)all states
-    all_states = get_sentiment_stats_for_candidate(cand, starttime, endtime)
+    all_states = get_sentiment_stats_for_candidate(collection, cand, starttime, endtime)
     cand_info['sentiment_scores']['All States'] = all_states
 
     # (2) by state
@@ -191,36 +191,36 @@ def get_aggregate_for_candidate(cand, starttime, endtime):
     # cand_info['sentiment_scores']['States'] = sentiment_by_state
 
     # hashtag stats
-    hashtag_stats = get_hashtag_stats_for_candidate(cand, starttime, endtime)
+    hashtag_stats = get_hashtag_stats_for_candidate(collection, cand, starttime, endtime)
     cand_info['hashtags'] = hashtag_stats
 
     return cand_info
 
-def aggregate(starttime, endtime):
+def aggregate(collection, starttime, endtime):
     result = {'candidate_data':{}}
 
     try:
         for cand in candidates:
-            result['candidate_data'][cand.encode('ascii','ignore')] = get_aggregate_for_candidate(cand, starttime, endtime)
+            result['candidate_data'][cand.encode('ascii','ignore')] = get_aggregate_for_candidate(collection, cand, starttime, endtime)
 
         return result
     except:
         return {'candidate_data':{}}
 
-def update_sentiment_int():
-    docs = collection.find()
-    c = 1
-    for doc in docs:
-        print c
-
-        oid = doc['_id']
-        sentiment = doc['sentiment']
-        doc['sentiment_int'] = convert_sentiment(sentiment)
-        del doc['_id']
-
-        collection.update({'_id' : oid}, {'$set' : doc}, upsert=False)
-
-        c += 1
+# def update_sentiment_int():
+#     docs = collection.find()
+#     c = 1
+#     for doc in docs:
+#         print c
+#
+#         oid = doc['_id']
+#         sentiment = doc['sentiment']
+#         doc['sentiment_int'] = convert_sentiment(sentiment)
+#         del doc['_id']
+#
+#         collection.update({'_id' : oid}, {'$set' : doc}, upsert=False)
+#
+#         c += 1
 
 if __name__ == '__main__':
     rough_start_time = int(sys.argv[1])

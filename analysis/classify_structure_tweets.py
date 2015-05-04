@@ -9,6 +9,8 @@ from math import floor, ceil
 
 import os
 
+from stream.mongocollection import *
+
 filename = os.path.dirname(os.path.realpath(__file__)) + "/../resources/candidates.json"
 with open(filename) as f:
     candidates = json.load(f)
@@ -27,10 +29,14 @@ def convert_sent(f):
     return int(f)
 
 if __name__ == '__main__':
-    client = pymongo.MongoClient(host="198.11.194.181", port=27017)
+    # client = pymongo.MongoClient(host="198.11.194.181", port=27017)
 
-    src_collection = client.newdb.tweets
-    dest_collection = client.prod.processed
+    # src_collection = client.newdb.tweets
+    # dest_collection = client.prod.processed
+
+    src_collection = cluster_newdb_tweets
+    dest_collection = cluster_prod_processed
+
     dest_collection.create_index(
                 [("id", pymongo.ASCENDING)],
                 unique=True)
@@ -42,7 +48,9 @@ if __name__ == '__main__':
     # for tweet in src_collection.find({'timestamp': {'$gte': 1430301600, '$lt': 1430312400}}):
     # for tweet in src_collection.find({'timestamp': {'$gte': 1430413200, '$lt': 1430409600}}):
 
-    for tweet in src_collection.find({'timestamp': {'$gte': 1430440140}}):
+    # for tweet in src_collection.find({'timestamp': {'$gte': 1430440140}}):
+
+    for tweet in src_collection.find({'timestamp': {'$gte': 1430410447}}):
         try:
             dt = parser.parse(tweet['created_at'])
 
