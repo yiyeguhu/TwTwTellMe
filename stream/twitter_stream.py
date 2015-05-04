@@ -155,6 +155,10 @@ def online_process(ob):
                 #         if 'text' in tag:
                 #             tw.hashtags.append(tag['text'])
 
+                print "000000000000000BEFORE INSERT000000000000000"
+                print cands
+                print pb2json(tw)
+
                 for cand in cands:
                     tw.candidate = cand
                     json_ob = pb2json(tw)
