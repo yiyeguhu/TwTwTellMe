@@ -156,7 +156,7 @@ def online_process(ob):
                 print pb2json(tw)
                 print "hello3"
 
-                tw.hashtags = ht
+                tw.hashtags.extend(ht)
                 # if 'entities' in ob and 'hashtags' in ob['entities']:
                 #     tags = ob['entities']['hashtags']
                 #     for tag in tags:
@@ -164,7 +164,7 @@ def online_process(ob):
                 #             tw.hashtags.append(tag['text'])
 
                 print pb2json(tw)
-                print "hello3"
+                print "hello4"
 
                 print "000000000000000BEFORE INSERT000000000000000"
                 print cands
