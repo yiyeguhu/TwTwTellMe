@@ -152,7 +152,8 @@ def online_process(ob):
                     tw.candidate = cand
                     json_ob = pb2json(tw)
 
-                    test_tweet.insert(json_ob, continue_on_error=True)
+                    prod_tweet.insert(json_ob, continue_on_error=True)
+                    # test_tweet.insert(json_ob, continue_on_error=True)
                     # collection2.insert(json_ob, continue_on_error=True)
 
 # def setup_streaming(consumer_key, consumer_secret, access_token, access_token_secret, tracks):
