@@ -54,7 +54,6 @@ class StdOutListener(StreamListener):
     def on_data(self, data):
         try:
             ob = json.loads(data)
-            print ob
             online_process(ob)
         except:
             pass
@@ -112,6 +111,9 @@ def online_process(ob):
             extxt = extxt + ', ' + ', '.join(um)
 
             cands = [cand for cand in return_candidates(extxt) if cand in candidates]
+
+            print cands
+            print extxt
 
             if cands:
                 tw = Tweet()
