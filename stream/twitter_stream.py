@@ -97,8 +97,6 @@ def _get_candidate_names():
 
 def online_process(ob):
     if "created_at" in ob and 'text' in ob:
-        print ""
-        print ob
         text = ob['text']
         if detect(text) == 'en':
             if 'entities' in ob and 'hashtags' in ob['entities']:
@@ -112,14 +110,7 @@ def online_process(ob):
 
             cands = [cand for cand in return_candidates(extxt) if cand in candidates]
 
-            print cands
-            # print ht
-            # print um
-            # print extxt
-
             if cands:
-                print "hello1"
-
                 tw = Tweet()
 
                 # required fields
@@ -146,15 +137,9 @@ def online_process(ob):
                     # except:
                     #     print "Geocoder exception"
 
-                print pb2json(tw)
-                print "hello2"
-
                 detected_themes = return_themes(extxt)
                 for theme in detected_themes:
                     tw.themes.append(theme)
-
-                print pb2json(tw)
-                print "hello3"
 
                 tw.hashtags.extend(ht)
                 # if 'entities' in ob and 'hashtags' in ob['entities']:
@@ -163,18 +148,10 @@ def online_process(ob):
                 #         if 'text' in tag:
                 #             tw.hashtags.append(tag['text'])
 
-                print pb2json(tw)
-                print "hello4"
-
-                print "000000000000000BEFORE INSERT000000000000000"
-                print cands
-                print pb2json(tw)
-
                 for cand in cands:
                     tw.candidate = cand
                     json_ob = pb2json(tw)
-                    print "*****************BEFORE INSERT*****************"
-                    print json_ob
+
                     test_tweet.insert(json_ob, continue_on_error=True)
                     # collection2.insert(json_ob, continue_on_error=True)
 
