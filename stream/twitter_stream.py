@@ -152,7 +152,7 @@ def online_process(ob):
                 for cand in cands:
                     tw.candidate = cand
                     json_ob = pb2json(tw)
-
+                    print json_ob
                     test_tweet.insert(json_ob, continue_on_error=True)
                     # collection2.insert(json_ob, continue_on_error=True)
 
