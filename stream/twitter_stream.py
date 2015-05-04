@@ -100,6 +100,8 @@ def online_process(ob):
 
         text = ob['text']
 
+        print text
+
         if detect(text) == 'en':
             if 'entities' in ob and 'hashtags' in ob['entities']:
                 ht = [hashtag['text'] for hashtag in ob['entities']['hashtags']]
