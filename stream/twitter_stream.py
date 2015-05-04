@@ -97,6 +97,7 @@ def _get_candidate_names():
 
 def online_process(ob):
     if "created_at" in ob and 'text' in ob:
+        print ob
         text = ob['text']
         if detect(text) == 'en':
             if 'entities' in ob and 'hashtags' in ob['entities']:
@@ -109,9 +110,9 @@ def online_process(ob):
             extxt = extxt + ', ' + ', '.join(um)
 
             cands = [cand for cand in return_candidates(extxt) if cand in candidates]
-            #
-            # print cands
-            # print extxt
+
+            print cands
+            print extxt
 
             if cands:
                 tw = Tweet()
