@@ -111,13 +111,11 @@ class TweetData(Resource):
     scores = ['Strongly Negative', 'Moderately Negative', 'Neutral', 'Moderately Positive', 'Strongly Positive']
 
     def get(self, ts, candidate):
-        print ts, candidate
         ts = ts-ts % self.sec_incr
         data = R_SERVER.get(ts)
         time_data = json.loads(data)
         tweets = time_data['candidate_data'][candidate]['tweets']
         hashtags = sorted(time_data['candidate_data'][candidate]['hashtags'], key=get_key, reverse=True)
-        print hashtags
         for tweet in tweets:
             tweet['sentiment_score'] = self.scores[tweet['sentiment_score']-1]
 
@@ -133,5 +131,3 @@ api.add_resource(TweetData, '/tweet-data/<int:ts>&<string:candidate>')
 
 if __name__ == "__main__":
     runner.run()
-    # c = ChartData()
-    # print c.get(1430229600, 1430834400)
