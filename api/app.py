@@ -49,12 +49,12 @@ class Tweets(Resource):
 
 
 class TimeRange(Resource):
-    keys_we_have = R_SERVER.keys()
-    min_ts = int(min(keys_we_have))
-    max_ts = int(max(keys_we_have))
 
     def get(self):
-        return [self.min_ts, self.max_ts]
+        keys_we_have = R_SERVER.keys()
+        min_ts = int(min(keys_we_have))
+        max_ts = int(max(keys_we_have))
+        return [min_ts, max_ts]
 
 
 
