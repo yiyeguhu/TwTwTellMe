@@ -75,32 +75,34 @@ class ChartData(Resource):
         charts = []
 
         for i, d in enumerate(PIPE.execute()):
-            time_data = json.loads(d)
-            data_dict[str(i)] = time_data
-            candidate_data = time_data['candidate_data']
-            for j, candidate in enumerate(candidate_data.keys()):
-                scores = candidate_data[candidate]['sentiment_scores']['All States']
-                if i == 0:
-                    charts.append({
-                                    'series':[
-                                        {'name': 'Strongly Negative',
-                                         'data': []},
-                                        {'name': 'Moderately Negative',
-                                         'data': []},
-                                        {'name': 'Neutral',
-                                         'data': []},
-                                        {'name': 'Moderately Positive',
-                                         'data': []},
-                                        {'name': 'Strongly Positive',
-                                         'data': []}
-                                    ],
-                                    'categories': list(category_keys),
-                                    'title': {'text': ''}}
-                    )
-                    charts[j]['title']['text'] = candidate
-                for k, series in enumerate(charts[j]['series']):
-                    series['data'].append(scores[str(k+1)])
-
+            try:
+                time_data = json.loads(d)
+                data_dict[str(i)] = time_data
+                candidate_data = time_data['candidate_data']
+                for j, candidate in enumerate(candidate_data.keys()):
+                    scores = candidate_data[candidate]['sentiment_scores']['All States']
+                    if i == 0:
+                        charts.append({
+                                        'series':[
+                                            {'name': 'Strongly Negative',
+                                             'data': []},
+                                            {'name': 'Moderately Negative',
+                                             'data': []},
+                                            {'name': 'Neutral',
+                                             'data': []},
+                                            {'name': 'Moderately Positive',
+                                             'data': []},
+                                            {'name': 'Strongly Positive',
+                                             'data': []}
+                                        ],
+                                        'categories': list(category_keys),
+                                        'title': {'text': ''}}
+                        )
+                        charts[j]['title']['text'] = candidate
+                    for k, series in enumerate(charts[j]['series']):
+                        series['data'].append(scores[str(k+1)])
+            except:
+                pass
         return {'response': charts}
 
 class TweetData(Resource):
@@ -130,3 +132,5 @@ api.add_resource(TweetData, '/tweet-data/<int:ts>&<string:candidate>')
 
 if __name__ == "__main__":
     runner.run()
+    # c = ChartData()
+    # print c.get(1430229600, 1430834400)
