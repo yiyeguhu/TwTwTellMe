@@ -95,10 +95,11 @@ class ChartData(Resource):
                                             {'name': 'Strongly Positive',
                                              'data': []}
                                         ],
-                                        'categories': list(category_keys),
+                                        'categories': [],
                                         'title': {'text': ''}}
                         )
                         charts[j]['title']['text'] = candidate
+                    charts[j]['categories'].append(category_keys[i])
                     for k, series in enumerate(charts[j]['series']):
                         series['data'].append(scores[str(k+1)])
             except:
