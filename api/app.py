@@ -49,12 +49,12 @@ class Tweets(Resource):
 
 
 class TimeRange(Resource):
-    keys_we_have = R_SERVER.keys()
-    min_ts = int(min(keys_we_have))
-    max_ts = int(max(keys_we_have))
 
     def get(self):
-        return [self.min_ts, self.max_ts]
+        keys_we_have = R_SERVER.keys()
+        min_ts = int(min(keys_we_have))
+        max_ts = int(max(keys_we_have))
+        return [min_ts, max_ts]
 
 
 
@@ -75,32 +75,35 @@ class ChartData(Resource):
         charts = []
 
         for i, d in enumerate(PIPE.execute()):
-            time_data = json.loads(d)
-            data_dict[str(i)] = time_data
-            candidate_data = time_data['candidate_data']
-            for j, candidate in enumerate(candidate_data.keys()):
-                scores = candidate_data[candidate]['sentiment_scores']['All States']
-                if i == 0:
-                    charts.append({
-                                    'series':[
-                                        {'name': 'Strongly Negative',
-                                         'data': []},
-                                        {'name': 'Moderately Negative',
-                                         'data': []},
-                                        {'name': 'Neutral',
-                                         'data': []},
-                                        {'name': 'Moderately Positive',
-                                         'data': []},
-                                        {'name': 'Strongly Positive',
-                                         'data': []}
-                                    ],
-                                    'categories': list(category_keys),
-                                    'title': {'text': ''}}
-                    )
-                    charts[j]['title']['text'] = candidate
-                for k, series in enumerate(charts[j]['series']):
-                    series['data'].append(scores[str(k+1)])
-
+            try:
+                time_data = json.loads(d)
+                data_dict[str(i)] = time_data
+                candidate_data = time_data['candidate_data']
+                for j, candidate in enumerate(candidate_data.keys()):
+                    scores = candidate_data[candidate]['sentiment_scores']['All States']
+                    if i == 0:
+                        charts.append({
+                                        'series':[
+                                            {'name': 'Strongly Negative',
+                                             'data': []},
+                                            {'name': 'Moderately Negative',
+                                             'data': []},
+                                            {'name': 'Neutral',
+                                             'data': []},
+                                            {'name': 'Moderately Positive',
+                                             'data': []},
+                                            {'name': 'Strongly Positive',
+                                             'data': []}
+                                        ],
+                                        'categories': [],
+                                        'title': {'text': ''}}
+                        )
+                        charts[j]['title']['text'] = candidate
+                    charts[j]['categories'].append(category_keys[i])
+                    for k, series in enumerate(charts[j]['series']):
+                        series['data'].append(scores[str(k+1)])
+            except:
+                pass
         return {'response': charts}
 
 class TweetData(Resource):
@@ -108,13 +111,11 @@ class TweetData(Resource):
     scores = ['Strongly Negative', 'Moderately Negative', 'Neutral', 'Moderately Positive', 'Strongly Positive']
 
     def get(self, ts, candidate):
-        print ts, candidate
         ts = ts-ts % self.sec_incr
         data = R_SERVER.get(ts)
         time_data = json.loads(data)
         tweets = time_data['candidate_data'][candidate]['tweets']
         hashtags = sorted(time_data['candidate_data'][candidate]['hashtags'], key=get_key, reverse=True)
-        print hashtags
         for tweet in tweets:
             tweet['sentiment_score'] = self.scores[tweet['sentiment_score']-1]
 
