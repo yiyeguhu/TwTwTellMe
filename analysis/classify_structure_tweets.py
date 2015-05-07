@@ -52,7 +52,8 @@ if __name__ == '__main__':
     # for tweet in src_collection.find({'timestamp': {'$gte': 1430410447}}):
     # for tweet in src_collection.find({'timestamp': {'$gte': 1430733120}}):
     # for tweet in src_collection.find({'timestamp': {'$gt': 1430837691}}):
-    for tweet in src_collection.find({'timestamp': {'$gt': 1430860304}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1430860304}}):
+    for tweet in src_collection.find({'timestamp': {'$gt': 1430866800}}):
         try:
             dt = parser.parse(tweet['created_at'])
 
