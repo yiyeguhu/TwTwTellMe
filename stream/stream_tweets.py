@@ -6,7 +6,7 @@ from utils import load_credentials, tweepy_auth, tweepy_api
 from tweepy import streaming, StreamListener
 import json
 import argparse
-from pip install import parser
+from dateutil import parser
 import calendar
 
 
