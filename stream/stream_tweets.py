@@ -8,6 +8,7 @@ import json
 import argparse
 from dateutil import parser
 import calendar
+from mongocollection import cluster_client
 
 
 class CustomStreamListener(StreamListener):
@@ -16,7 +17,7 @@ class CustomStreamListener(StreamListener):
         self.count = 0
         self.verbose = verbose
         super(StreamListener, self).__init__()
-        self.client = pymongo.MongoClient(host="198.11.194.181", port=27017)
+        self.client = cluster_client
         self.collection = self.client.newdb.tweets
         self.create_index()
         self.counter = 0

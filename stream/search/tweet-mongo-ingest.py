@@ -7,6 +7,8 @@ import json
 import sys
 from dateutil import parser
 import calendar
+from mongocollection import cluster_client
+
 
 
 def list_tweet_files(file_pattern="tweet_*_*.json"):
@@ -32,9 +34,8 @@ def tweets(tweet_files=list_tweet_files()):
                     yield modify_tweets(line)
 
 
-def ingest(ingest_tweets=tweets(), host="198.11.194.181", port=27017, db="newdb",
-           collection="tweets"):
-    client = pymongo.MongoClient(host, port)
+def ingest(ingest_tweets=tweets(), db="newdb", collection="tweets"):
+    client = cluster_client
     try:
         collection = client[db][collection]
         try:
