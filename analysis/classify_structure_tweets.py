@@ -49,8 +49,22 @@ if __name__ == '__main__':
     # for tweet in src_collection.find({'timestamp': {'$gte': 1430413200, '$lt': 1430409600}}):
 
     # for tweet in src_collection.find({'timestamp': {'$gte': 1430440140}}):
-
-    for tweet in src_collection.find({'timestamp': {'$gte': 1430410447}}):
+    # for tweet in src_collection.find({'timestamp': {'$gte': 1430410447}}):
+    # for tweet in src_collection.find({'timestamp': {'$gte': 1430733120}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1430837691}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1430860304}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1430866800}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1430985409}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1430866800, '$lt': 1430956800}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1431010800, '$lt': 1431050400}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1431014400, '$lt': 1431050400}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1431018000, '$lt': 1431050400}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1431025200, '$lt': 1431050400}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1431028800, '$lt': 1431050400}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1431036000, '$lt': 1431050400}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1431457200, '$lt': 1431496800}}):
+    # for tweet in src_collection.find({'timestamp': {'$gt': 1431594000, '$lt': 1431630000}}):
+    for tweet in src_collection.find({'timestamp': {'$gt': 1431705600, '$lt': 1431756000}}):
         try:
             dt = parser.parse(tweet['created_at'])
 
