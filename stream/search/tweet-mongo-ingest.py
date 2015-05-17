@@ -9,6 +9,7 @@ from dateutil import parser
 import calendar
 
 
+
 def list_tweet_files(file_pattern="tweet_*_*.json"):
     return glob.glob(file_pattern)
 
@@ -32,7 +33,7 @@ def tweets(tweet_files=list_tweet_files()):
                     yield modify_tweets(line)
 
 
-def ingest(ingest_tweets=tweets(), host="198.11.194.181", port=27017, db="newdb",
+def ingest(ingest_tweets=tweets(), host="198.11.194.188", port=27017, db="newdb",
            collection="tweets"):
     client = pymongo.MongoClient(host, port)
     try:
